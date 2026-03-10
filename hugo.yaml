@@ -76,7 +76,7 @@ params:
       services:
         light: true # enable light theme. default "true"
         dark: true # enable dark theme. default "true"
-        default: system # can be either light, dark or system. default "system"
+        default: dark # can be either light, dark or system. default "system"
 
     # Enable and configure portfolio
     portfolio:
@@ -143,10 +143,10 @@ params:
       services:
         # Google Analytics
         google:
-          id: G-H4LBG7NDFZ
-        # # CounterDev
-        # counterDev:
-        #   id: <your counterdev id>
+          id: G-RF5CW75VGK
+        # CounterDev
+        counterDev:
+          id: 0d1b5f32-0905-49c8-a6a7-938c80e4d84d
         # # GoatCounter
         # goatCounter:
         #   code: <your goat counter code>
@@ -157,18 +157,13 @@ params:
 
     # Enable Support
     support:
-      enable: false
+      enable: true
       services:
-        kofi:
-          user: hossainemruz
-          text: Tip Me
-          textColor: '#f9fafc'
-          backgroundColor: '#248aaa'
-        # buymeacoffee:
-        #   user: <your buymeacoffee.com user>
-        #   text: Support me on Buy me a coffee!
-        #   info: Buy me a coffee!
-        #   color: '#FFDD00'
+        buymeacoffee:
+          user: koosjanse
+          text: Support me on Buy me a coffee!
+          info: Buy me a coffee!
+          color: '#FFDD00'
 
     # specify whether you want to show Table of Contents in reading page
     toc:
@@ -256,7 +251,7 @@ params:
 
     # Enable reading time support in post cards and in post pages
     readingTime:
-      enable: false
+      enable: true
     
     # Number of posts to show to each page. Default is "12"
     pagination:
@@ -284,7 +279,7 @@ params:
     # Show/hide newsletter section in the footer. Default is "true".
     # Currently, it supports "mailchimp".
     newsletter:
-      enable: false
+      enable: true
       # provider: mailchimp
       # mailchimpURL: https://github.us1.list-manage.com/subscribe/post?u=19de52a4603135aae97163fd8&amp;id=094a24c76e
 
