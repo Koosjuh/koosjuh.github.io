@@ -26,6 +26,11 @@ email: "koos@koosjanse.com"
 github: "Koosjuh"
 linkedin: "https://www.linkedin.com/in/koosjanse"
 
+params:
+  features:
+    darkMode:
+      enable: true
+      
 markup:
   goldmark:
     renderer:
