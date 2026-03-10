@@ -26,7 +26,7 @@ defaultContentLanguage: en
 markup:
   goldmark:
     renderer:
-      unsafe: false
+      unsafe: true
   tableOfContents:
     startLevel: 2
     endLevel: 6
@@ -80,7 +80,7 @@ params:
       services:
         light: true # enable light theme. default "true"
         dark: true # enable dark theme. default "true"
-        default: dark # can be either light, dark or system. default "system"
+        default: system # can be either light, dark or system. default "system"
 
     # Enable and configure portfolio
     portfolio:
