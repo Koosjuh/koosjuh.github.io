@@ -1,0 +1,56 @@
+section:
+  name: Over mij
+  id: about
+  enable: true
+  weight: 10
+  showOnNavbar: true
+  template: sections/about.html
+
+designation: "Principal Security Analist"
+
+company:
+  name: Wortell
+  url: "https://www.wortell.nl"
+
+summary: |
+  Ik ben een gedreven Security Analist met een achtergrond in Modern Workplace-technologieën en een sterke focus op Microsoft Security. Als onderdeel van het MxDR-team bij Wortell gebruik ik mijn ervaring en nieuwsgierigheid om organisaties te helpen hun security-positie te versterken en security-incidenten op te lossen.
+
+  Ik ben deze blog gestart om te documenteren wat ik onderweg leer. Door te schrijven dwing ik mezelf om dieper in technische onderwerpen te duiken, mijn aannames te testen en mijn kennis te valideren. Tegelijk hoop ik dat deze artikelen anderen helpen die met vergelijkbare vraagstukken werken binnen security, Microsoft-ecosystemen of homelab-omgevingen.
+
+  Buiten technologie breng ik graag tijd door met mijn familie, game ik, verzamel ik retro games, luister ik naar vinyl, kook ik en volg ik basketbal.
+
+socialLinks:
+  - name: Email
+    icon: "fas fa-envelope"
+    url: "mailto:koos@koosjanse.com"
+  - name: Github
+    icon: "fab fa-github"
+    url: "https://github.com/Koosjuh"
+  - name: LinkedIn
+    icon: "fab fa-linkedin"
+    url: "https://www.linkedin.com/in/koosjanse/"
+
+resourceLinks:
+  - title: "LinkedIn"
+    url: "https://www.linkedin.com/in/koosjanse/"
+
+badges:
+  - type: certification
+    name: "Microsoft Certified: Azure Solutions Architect Expert"
+    url: "https://learn.microsoft.com/en-us/users/jacobusjanse-8608/credentials/d974a25bcd33fc14"
+    badge: "https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-expert-badge.svg"
+
+  - type: certification
+    name: "Certified Flare Analyst"
+    url: "https://www.credly.com/badges/b0a021b8-abd9-4d55-b480-d4254cfecca6/public_url"
+    badge: "https://flare.io/wp-content/uploads/FLR-Group-59.svg"
+
+  - type: certification
+    name: "MCSE: Mobility"
+    url: "https://www.credly.com/badges/626fc87c-9d9b-4924-854f-477301f9a248"
+    badge: "https://images.credly.com/size/340x340/images/d8d53c3e-2e68-4965-b3fc-14702b214b09/MCSE-Mobility-2019.png"
+
+  - type: certification
+    name: "MCSA: Windows Server 2012"
+    url: "https://www.credly.com/badges/5d60aeef-ed45-4e69-8606-0c5e0884f91f"
+    badge: "https://images.credly.com/size/340x340/images/8132c1b3-ae0a-401e-918d-221cce5d10f9/MCSA-Windows-Server-2012-2018.png"
