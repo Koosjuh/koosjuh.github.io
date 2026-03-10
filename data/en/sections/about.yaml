@@ -32,70 +32,42 @@ socialLinks:
   icon: "fab fa-github"
   url: "https://www.github.com/example"
 
-- name: Stackoverflow
-  icon: "fab fa-stack-overflow"
-  url: "#"
-
 - name: LinkedIn
   icon: "fab fa-linkedin"
   url: "#"
 
-- name: Twitter
-  icon: "fab fa-twitter"
-  url: "#"
 
-- name: Facebook
-  icon: "fab fa-facebook"
-  url: "#"
-
-- name: Mastadon
-  icon: "fab fa-mastodon"
-  url: "#"
-  rel: "me noopener"
-
-- name: ResearchGate
-  icon: "fab fa-researchgate"
-  url: "https://www.researchgate.net/profile/john-doe"
 
 # You can put custom buttons to link your relevant resources.
 # For example, you can put link for your resume.
 resourceLinks:
-- title: "My Resume"
-  url: "files/resume.pdf"
+- title: "LinkedIn"
+  url: "https://www.linkedin.com/in/koosjanse/"
 
 # Show your badges
 # You can show your verifiable certificates from https://www.credly.com.
 # You can also show a circular bar indicating the level of expertise on a certain skill
 badges:
 - type: certification
-  name: Certified Kubernetes Security Specialist
-  url: "https://www.credly.com/org/the-linux-foundation/badge/exam-developer-certified-kubernetes-security-specialist"
-  badge: "https://images.credly.com/size/680x680/images/f4bf92ed-8985-40b2-bc07-2f9308780854/kubernetes-security-specialist-logo-examdev.png"
+  name: Microsoft Certified: Azure Solutions Architect Expert
+  url: "https://learn.microsoft.com/en-us/users/jacobusjanse-8608/credentials/d974a25bcd33fc14"
+  badge: "https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-expert-badge.svg"
 
 - type: certification
-  name: Istio and IBM Cloud Kubernetes Service
-  url: "https://www.credly.com/org/the-linux-foundation/badge/exam-developer-certified-kubernetes-security-specialist"
-  badge: "https://images.credly.com/size/680x680/images/8d34d489-84bf-4861-a4a0-9e9d68318c5c/Beyond_basics_of_Istio_on_Cloud_v2.png"
+  name: Certified Flare Analyst
+  url: "https://www.credly.com/badges/b0a021b8-abd9-4d55-b480-d4254cfecca6/public_url"
+  badge: "https://images.credly.com/size/340x340/images/b85def08-3f07-4042-adb0-615f01700752/blob"
 
 - type: certification
-  name: Artificial Intelligence and Machine Learning
-  url: "https://www.credly.com/org/grupo-bancolombia/badge/artificial-intelligence-and-machine-learning"
-  badge: "https://images.credly.com/size/680x680/images/e027514f-9d07-4b29-862f-fe21a8aaebf1/ae.png"
+  name: MCSE: Mobility
+  url: "https://www.credly.com/badges/626fc87c-9d9b-4924-854f-477301f9a248"
+  badge: "https://images.credly.com/size/340x340/images/d8d53c3e-2e68-4965-b3fc-14702b214b09/MCSE-Mobility-2019.png"
 
-- type: soft-skill-indicator
-  name: Leadership
-  percentage: 85
-  color: blue
+- type: certification
+  name: MCSA: Windows Server 2012
+  url: "https://www.credly.com/badges/5d60aeef-ed45-4e69-8606-0c5e0884f91f"
+  badge: "https://images.credly.com/size/340x340/images/8132c1b3-ae0a-401e-918d-221cce5d10f9/MCSA-Windows-Server-2012-2018.png"
 
-- type: soft-skill-indicator
-  name: Team Work
-  percentage: 90
-  color: yellow
-
-- type: soft-skill-indicator
-  name: Hard Working
-  percentage: 85
-  color: orange
 
 # you can also provide color code instead of the color name
 # - type: soft-skill-indicator
