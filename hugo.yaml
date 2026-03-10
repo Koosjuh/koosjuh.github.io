@@ -23,6 +23,11 @@ languages:
     languageName: English
     title: "Koos's Tech Blog"
     weight: 1
+  nl:
+    languageCode: nl
+    languageName: Dutch
+    title: "Koos's Tech Blog"
+    weight: 2
 # default language for the content
 defaultContentLanguage: en
 
