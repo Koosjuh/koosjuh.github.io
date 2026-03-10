@@ -1,0 +1,10 @@
+section:
+  name: Recente berichten
+  id: recent-posts
+  enable: true
+  weight: 1
+  showOnNavbar: true
+
+hideTitle: true
+numShow: 4
+showMoreButton: true
