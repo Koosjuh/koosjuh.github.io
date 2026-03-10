@@ -3,7 +3,7 @@ languageCode: "en-us"
 theme: "toha"
 
 title: "Koos's Tech Blog"
-description: "Security, Microsoft, homelab, and tech write-ups"
+description: "Security Blog, Microsoft, homelab, CVE and other deep dives and tech write-ups"
 
 name: "Koos Janse"
 nickname: "Koos"
