@@ -58,22 +58,22 @@ resourceLinks:
 # You can also show a circular bar indicating the level of expertise on a certain skill
 badges:
 - type: certification
-  name: Microsoft Certified: Azure Solutions Architect Expert
+  name: "Microsoft Certified: Azure Solutions Architect Expert"
   url: "https://learn.microsoft.com/en-us/users/jacobusjanse-8608/credentials/d974a25bcd33fc14"
   badge: "https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-expert-badge.svg"
 
 - type: certification
-  name: Certified Flare Analyst
+  name: "Certified Flare Analyst"
   url: "https://www.credly.com/badges/b0a021b8-abd9-4d55-b480-d4254cfecca6/public_url"
   badge: "https://images.credly.com/size/340x340/images/b85def08-3f07-4042-adb0-615f01700752/blob"
 
 - type: certification
-  name: MCSE: Mobility
+  name: "MCSE: Mobility"
   url: "https://www.credly.com/badges/626fc87c-9d9b-4924-854f-477301f9a248"
   badge: "https://images.credly.com/size/340x340/images/d8d53c3e-2e68-4965-b3fc-14702b214b09/MCSE-Mobility-2019.png"
 
 - type: certification
-  name: MCSA: Windows Server 2012
+  name: "MCSA: Windows Server 2012"
   url: "https://www.credly.com/badges/5d60aeef-ed45-4e69-8606-0c5e0884f91f"
   badge: "https://images.credly.com/size/340x340/images/8132c1b3-ae0a-401e-918d-221cce5d10f9/MCSA-Windows-Server-2012-2018.png"
 
