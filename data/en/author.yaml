@@ -2,7 +2,7 @@
 name: "Koos Janse"
 nickname: "Koos"
 # greeting message before your name. it will default to "Hi! I am" if not provided
-greeting: "Hi, I am Koos"
+greeting: "Hi, I am "
 image: "images/techblogfavicon.png"
 # give your some contact information. they will be used in the footer
 contactInfo:
@@ -12,4 +12,3 @@ contactInfo:
 summary:
   - I am a Security Analyst
   - I am a Modern Workplace Consultant
-  - I love gaming and collecting games
