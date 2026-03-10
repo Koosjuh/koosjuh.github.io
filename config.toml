@@ -1,4 +1,5 @@
-baseURL = "https://koosjuh.github.io/"
+baseURL = "https://koosjuh.github.io"
 languageCode = "en-us"
 title = "Koos's Tech Blog"
 theme = "toha"
+
