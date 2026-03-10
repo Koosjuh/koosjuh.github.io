@@ -6,7 +6,7 @@ section:
   showOnNavbar: true
   template: sections/about.html
 
-designation: Principal Security Analyst
+designation: "Principal Security Analyst"
 
 company:
   name: Wortell
