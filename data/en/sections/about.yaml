@@ -19,7 +19,18 @@ company:
 # resume: "files/resume.pdf"
 
 # a summary about you
-summary: 'Test'
+summary: |
+  I am a driven Security Analyst with a background in Modern Workplace technologies and a strong focus on Microsoft Security. As part of the MxDR team at Wortell, I use my experience and curiosity to help organizations strengthen their security posture. My daily work revolves around Microsoft Sentinel and the Microsoft Defender ecosystem, where I investigate incidents, perform threat hunting, and help customers improve their defensive capabilities.
+
+  A large part of my role involves guiding organizations in improving their security posture. Depending on their maturity level, this can range from improving configurations and operational practices to helping shape longer-term security strategies and future security projects. My goal is always to translate complex security concepts into practical improvements that actually reduce risk.
+
+  Before moving into security, I worked as a Modern Workplace Consultant. During that time I specialized in technologies such as Windows 10 and 11, Microsoft Intune, Entra ID (Azure AD), Conditional Access, Office 365, Azure Virtual Desktop, Windows 365, and Defender for Endpoint. That background gives me a broader perspective when investigating incidents or vulnerabilities, because I understand both the end-user environment and the underlying infrastructure.
+
+  Since 2019 I have worked in Agile environments using Scrum, Confluence, Jira, and Azure DevOps. Outside of my professional work I maintain a personal lab environment that includes an Azure development tenant, NAS infrastructure, a UniFi network, and Raspberry Pi clusters. This lab allows me to experiment with new technologies, test ideas, and deepen my understanding of how modern systems behave in real environments.
+
+  I started this blog to document what I learn along the way. Writing forces me to dig deeper into technical subjects, challenge my assumptions, and validate my understanding. At the same time, I hope these write-ups help others who are working through similar problems in security, Microsoft ecosystems, or homelab environments.
+
+  Outside of technology I enjoy spending time with my family, gaming, collecting retro games, listening to vinyl, cooking, and following basketball.
 
 # your social links
 # give as many as you want. use font-awesome for the icons.
@@ -35,8 +46,6 @@ socialLinks:
 - name: LinkedIn
   icon: "fab fa-linkedin"
   url: "#"
-
-
 
 # You can put custom buttons to link your relevant resources.
 # For example, you can put link for your resume.
@@ -67,7 +76,6 @@ badges:
   name: MCSA: Windows Server 2012
   url: "https://www.credly.com/badges/5d60aeef-ed45-4e69-8606-0c5e0884f91f"
   badge: "https://images.credly.com/size/340x340/images/8132c1b3-ae0a-401e-918d-221cce5d10f9/MCSA-Windows-Server-2012-2018.png"
-
 
 # you can also provide color code instead of the color name
 # - type: soft-skill-indicator
