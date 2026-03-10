@@ -27,7 +27,7 @@ languages:
   nl:
     languageCode: nl
     languageName: Dutch
-    title: Tech Blog van Koos
+    title: "Tech Blog van Koos"
     weight: 2
 # default language for the content
 defaultContentLanguage: en
