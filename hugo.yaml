@@ -30,11 +30,6 @@ enableEmoji: true
 params:
   background: /images/background.jpg
 
-  logo:
-    main: /images/main-logo.png
-    inverted: /images/main-logo.png
-    favicon: /images/techblogfavicon.png
-
   gitRepo: https://github.com/Koosjuh/koosjuh.github.io
   gitBranch: main
 
