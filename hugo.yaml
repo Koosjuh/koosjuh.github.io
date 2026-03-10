@@ -42,7 +42,7 @@ params:
       services:
         light: true
         dark: true
-        default: dark
+        default: "dark"
 
     portfolio:
       enable: true
