@@ -23,7 +23,7 @@ menu:
     identifier: Configuration
     name: "ASR Validation"
     identifier: "asr-validation"
-    parent: "Configuration"
+    parent: "Devices"
     weight: 300
 ---
 
