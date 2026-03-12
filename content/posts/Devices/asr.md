@@ -5,8 +5,8 @@ hero: "/images/posts/asr.png"
 description: "A practical deep dive into how Microsoft Defender for Endpoint validates ASR state through TVM, registry policy evidence, and local PowerShell effective state."
 summary: "Learn how to validate ASR posture using Defender TVM, registry-based policy evidence, and local PowerShell checks, and understand why these sources do not always match the Defender portal UI."
 categories:
-  - "Microsoft Defender"
-  - "Security"
+  - "Defender"
+  - "Configuration"
   - "Endpoint"
 tags:
   - "ASR"
@@ -17,12 +17,6 @@ tags:
   - "Registry"
 draft: false
 toc: true
-menu:
-  sidebar:
-    name: "ASR Validation"
-    identifier: "asr-validation"
-    parent: "mde"
-    weight: 300
 ---
 
 # ASR Validation via Advanced Hunting, Registry Policy Evidence, and Local Effective State
