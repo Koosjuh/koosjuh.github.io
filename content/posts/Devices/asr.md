@@ -17,6 +17,14 @@ tags:
   - "Registry"
 draft: false
 toc: true
+menu:
+  sidebar:
+    name: Devices
+    identifier: Configuration
+    name: "ASR Validation"
+    identifier: "asr-validation"
+    parent: "Configuration"
+    weight: 300
 ---
 
 # ASR Validation via Advanced Hunting, Registry Policy Evidence, and Local Effective State
