@@ -1,8 +1,3 @@
----
-title: "Session Validation"
-description: "Template for validating user sessions across Entra ID and on-premises environments during security investigations."
----
-
 ```text
 **User**
 #####
