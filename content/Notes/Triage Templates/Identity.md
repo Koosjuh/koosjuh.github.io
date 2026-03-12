@@ -29,16 +29,3 @@ Location
 - [IP MFA]
 - [IP Non interactive]
 ```
-
-## On-Premises
-
-```text
-**User**
-#####
-User:
-- [IdentityInfo]
-- [On Premis Account Changes]
-- [OnPremis Logon]
-- [IdentityLogonEvents]
-- [DeviceLogonEvents]
-```
