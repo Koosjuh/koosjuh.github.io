@@ -20,8 +20,6 @@ menu:
     weight: 200
 ---
 
-# Break-the-Glass Accounts: Ownership and design pitfalls in EntraID
-
 During my work I frequently encounter misconceptions about break-the-glass accounts and weaknesses in how they are implemented. Because these accounts are rarely used, their design is often treated as a simple checklist item rather than a security control that requires careful consideration. This short blog highlights some of the patterns I regularly see and the recommendations I typically provide when reviewing tenant configurations.
 
 I will briefly cover the fundamentals and then move on to several implementation mistakes that appear surprisingly often in real environments.
