@@ -134,3 +134,6 @@ https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/group
 
 Monitoring Break-Glass Accounts  
 https://jeffreyappel.nl/monitor-azure-ad-break-glass-accounts-with-azure-sentinel/
+
+The views expressed in this article are my own
+
