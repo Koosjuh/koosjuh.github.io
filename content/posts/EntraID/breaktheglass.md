@@ -20,8 +20,6 @@ menu:
     weight: 200
 ---
 
-# Break-the-Glass Accounts: Ownership and design pitfalls in EntraID
-
 During my work I frequently encounter misconceptions about break-the-glass accounts and weaknesses in how they are implemented. Because these accounts are rarely used, their design is often treated as a simple checklist item rather than a security control that requires careful consideration. This short blog highlights some of the patterns I regularly see and the recommendations I typically provide when reviewing tenant configurations.
 
 I will briefly cover the fundamentals and then move on to several implementation mistakes that appear surprisingly often in real environments.
@@ -53,10 +51,10 @@ It's simple, it's your business, it's your tenant, it's your responsibility. Doe
 What I also sadly see a lot is that break the glass accounts are literally called Break the Glass account or Emergency Access account.
 
 Examples:
-breakglass@contoso.onmicrosoft.com
-breakglass-admin@contoso.onmicrosoft.com
-emergencyaccess@contoso.onmicrosoft.com
-bga_MSPNAME@contoso.onmicrosoft.com
+- breakglass@contoso.onmicrosoft.com
+- breakglass-admin@contoso.onmicrosoft.com
+- emergencyaccess@contoso.onmicrosoft.com
+- bga_{MSPNAME}@contoso.onmicrosoft.com
 
 Or any other variation of this.
 
