@@ -117,7 +117,7 @@ One of the things that makes Resident Evil memorable is the way access is delibe
 
 Imagine if the game simply gave you a master key from the start. You could unlock every door immediately. The game would be much faster, but it would also remove much of the experience and many of the moments that make the game interesting. I hold Resident Evil in high regard and played the original in September 1997. And I still play it every other year all the way through. 
 
-![Resident Evil](/images/posts/games/residentevil.jpg)
+![Resident Evil](/images/posts/games/residentevil.png)
 
 ---
 
