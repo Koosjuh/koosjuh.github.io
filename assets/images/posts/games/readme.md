@@ -1,0 +1,1 @@
+Analogy for games folder.
