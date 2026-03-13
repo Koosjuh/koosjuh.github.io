@@ -6,8 +6,7 @@ description: "A practical deep dive into how Microsoft Defender for Endpoint val
 summary: "Learn how to validate ASR posture using Defender TVM, registry-based policy evidence, and local PowerShell checks, and understand why these sources do not always match the Defender portal UI."
 categories:
   - "Defender"
-  - "Configuration"
-  - "Endpoint"
+  - "Devices"
 tags:
   - "ASR"
   - "Microsoft Defender for Endpoint"
@@ -15,14 +14,14 @@ tags:
   - "Advanced Hunting"
   - "PowerShell"
   - "Registry"
+  - "Configuration"
+  - "Endpoint"
 draft: false
 toc: true
 menu:
   sidebar:
     name: Devices
     identifier: Configuration
-    name: "ASR Validation"
-    identifier: "asr-validation"
     parent: "Devices"
     weight: 300
 ---
