@@ -105,38 +105,21 @@ params:
 
     # Enable comment feature. There, should be only one of them.
     comment:
-      enable: false
+      enable: true
       services:
-        disqus:
-          shortName: toha-example-site
-        # valine:
-        #   appId: HTV6askWxVo3vOxlqjjaq2hd-MsYXbMMI
-        #   appKey: pVrT3C85KGIuk27t07eh6bUC
-        #   avatar: retro
-        #   placeholder: Share your thought.
-        #   lang: en
-        #   recordIP: true
-        #   enableQQ: true
-        # utteranc:
-        #   repo: github.com/hugo-toha/hugo-toha.github.io
-        #   issueTerm: title
-        #   theme: github-light
-        # giscus:
-        #   repo: your-repo/name
-        #   repoID: your-repo-id
-        #   category: your-category
-        #   categoryID: your-category-id
-          # theme: light
-          # map: url
-          # reaction: 1
-          # metadata: 0
-          # inputPosition: bottom
-          # crossOrigin: anonymous
-        # commento:
-        #   serverURL: cdn.commento.io
-        #   autoInit: true
-        #   hideDeleted: false
-
+        giscus:
+          repo: "Koosjuh/koosjuh.github.io"
+          repoID: "R_kgDORgVYXQ"
+          category: "Posts"
+          categoryID: "DIC_kwDORgVYXc4C4gVl"
+        map: "pathname"
+        strict: "0"
+        reaction: "1"
+        Metadata: "0"
+        inputPosition: "bottom"
+        theme: "preferred_color_scheme"
+        crossOrigin: anonymous
+          
     # Enable Analytics
     analytics:
       enable: true
@@ -184,7 +167,7 @@ params:
 
     # Enable this to use `embed-pdf` shortcode.
     embedpdf:
-      enable: true
+      enable: false
 
     # Enable this to create flowcharts using shortcodes.
     flowchart:
