@@ -117,7 +117,7 @@ params:
         reaction: "1"
         Metadata: "0"
         inputPosition: "bottom"
-        theme: dark
+        theme: "dark"
         crossOrigin: anonymous
           
     # Enable Analytics
