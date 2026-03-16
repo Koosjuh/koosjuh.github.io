@@ -10,5 +10,12 @@ contactInfo:
   github: Koosjuh
 
 summary:
-  - I am a Security Analyst
-  - I am a Modern Workplace Consultant
+  - I am a Senior Security Analyst specializing in Microsoft security technologies.
+  - I was and still am a Modern Workplace specialist
+  - My primary focus area is Attack Surface Management and understanding how exposure paths appear across identities, endpoints, and cloud services.
+  - I work extensively with Microsoft Defender XDR, Microsoft Sentinel, and Entra ID to investigate incidents and hunt for threats.
+  - My blog is build open source. If you think one of my blog posts needs improvements. Improve this page! And contribute. 
+  - Much of my work involves analyzing telemetry and building KQL queries to understand how attacks actually manifest in enterprise environments.
+  - This blog documents practical findings from real investigations, security misconfigurations, and research into Microsoft security platforms.
+  - I prefer understanding how systems and security controls actually work rather than relying solely on dashboards.
+  - My goal is to share practical detections, queries, and insights that help defenders investigate faster and reduce attack surface.
