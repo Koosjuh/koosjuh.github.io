@@ -89,7 +89,7 @@ Also directly assigning a Break the Glass account wouldn't give much administrat
 
 There is of course also **Role Assignable Groups**, which can be configured as well. These can be used for governance and lifecycle management and there is an argument to be made for this.
 
-However in essence **KISS — Keep It Simple**. I would begin with direct assignment.
+However in essence **KIS - Keep It Simple**. I would just do direct assignment. These BG accounts shouldn't create that much overhead, and everyone in the IT organisation should know them.
 
 Please see documentation below to read further on Role Assignable Groups. Group-based exclusions create an additional control surface. The environment matters.
 
