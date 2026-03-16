@@ -107,6 +107,14 @@ Also after a successful login the credentials should be renewed.
 
 ---
 
+## The take away
+
+For further best practices I would suggest reading the Microsoft and NIST documentation below. This post isn't about best practices or a guide on how to set it up. The key takeaway is that you need emergency access and that ability shouldn't be easily taken away. Make it as difficult as possible. By setting a proper naming convention, you would add valuable time before a malicious actor finds out which Break-the-Glass accounts exist in the environment. So even an additional 5 minutes of reconnaissance can make a difference. After finding out the Break-the-Glass accounts, the actor would need to escalate their privileges to Security Administrator before removing the ability to get back into the tenant.
+
+For example, let's say the cookies for a persistent session of a super user with User Administrator privileges get stolen. It would take some time for that attacker to know which accounts are the Break-the-Glass accounts if a proper naming convention is used, if that attacker can figure it out at all with that level of privilege. And even if the attacker does find out, they would need a new role or a new user to remove your ability to get back into your tenant. With proper monitoring and security in place, that would likely have already triggered alerts and that user would have been blocked from the environment before finding out what the emergency accounts were.
+
+---
+
 ## Documentation
 
 Some interesting reads:
