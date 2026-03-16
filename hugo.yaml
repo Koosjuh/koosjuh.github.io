@@ -117,7 +117,7 @@ params:
         reaction: "1"
         Metadata: "0"
         inputPosition: "bottom"
-        theme: "preferred_color_scheme"
+        theme: dark
         crossOrigin: anonymous
           
     # Enable Analytics
@@ -140,7 +140,7 @@ params:
 
     # Enable Support
     support:
-      enable: true
+      enable: false
       services:
         buymeacoffee:
           user: koosjanse
@@ -268,4 +268,4 @@ params:
 
     # Show/hide disclaimer notice in the footer. Default is "false".
     disclaimer:
-      enable: true
+      enable: false
