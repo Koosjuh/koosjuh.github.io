@@ -107,18 +107,6 @@ Also after a successful login the credentials should be renewed.
 
 ---
 
-## Game Analogy
-
-I collect video games and some people drink coffee for their personal touch, others have movie references. I have about 1500 games too choose from so, as someone who collects video games, I sometimes think about break-the-glass accounts in the context of Resident Evil.
-
-One of the things that makes Resident Evil memorable is the way access is deliberately restricted. You find keys, solve puzzles, and slowly unlock parts of the environment. That design forces exploration and creates tension.
-
-Imagine if the game simply gave you a master key from the start. You could unlock every door immediately. The game would be much faster, but it would also remove much of the experience and many of the moments that make the game interesting. I hold Resident Evil in high regard and played the original in September 1997. And I still play it every other year all the way through. 
-
-![Resident Evil](/images/posts/games/residentevil.png)
-
----
-
 ## Documentation
 
 Some interesting reads:
