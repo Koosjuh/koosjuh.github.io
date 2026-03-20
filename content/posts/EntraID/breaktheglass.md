@@ -29,14 +29,16 @@ I will briefly cover the fundamentals and then move on to several implementation
 
 ## What are break-the-glass Accounts and what are they used for?
 
-Break-the-glass accounts are emergency accounts for, first and foremost, the owner of the Tenant. As a tenant owner, business owner, you always need a way to get back into your tenant. Break-the-glass accounts exist to protect the tenant owner's ability to recover control, and their design should reflect that.
+The first misconcenteption I see often is the debate who the break-the-glass accounts are emergency accounts for? Well they are for, first and foremost, the owner of the Tenant. As a tenant owner, business owner, you always need a way to get back into your tenant. Break-the-glass accounts exist to protect the tenant owner's ability to recover control, and their design should reflect that.
 
-Having emergency access accounts is a good practice, but if they are implemented incorrectly they can become an obstacle rather than a safeguard. Emergency access accounts exist to recover from situations where normal administrative access fails. Therefore they should only be used in case of an emergency.
-
-In the real world I often encounter businesses that do have a break-the-glass account but don't have access to it, their MSP has access to it. The logic is, they do IT, they are the ones who must have emergency access. However the owner of the tenant and business should always have a break-the-glass account and after that it is up to the owner who they trust with other break-the-glass accounts.
+In the real world I often encounter businesses that do have a break-the-glass account however don't have access to it, their MSP has access to it. The logic is, they do IT, they are the ones who must have emergency access. However the owner of the tenant and business should always have a break-the-glass account and after that it is up to the owner who they trust with other break-the-glass accounts.
 
 It's simple, it's your business, it's your tenant, it's your responsibility. When the trust is there, give emergency access to your MSP or MSSP as well, while at the same time keeping the number in check, however the tenant/business owner must always have the ability to regain control. 
 This is of course a governance standpoint and to my knowledge is not officially recommended anywhere.
+
+**The takeaway** 
+
+Break-the-glass accounts are your way of gaining total control back over your tenant. That total control should always be in the tenant owners hands.
 
 While the concept itself is simple, the way break-the-glass accounts are implemented often introduces avoidable risks. In the following sections I will walk through several common mistakes I encounter during tenant reviews.
 
@@ -60,10 +62,10 @@ Example:
 
 {firstletter}.{lastname}@tenant.com
 
-
-Doesn't mean they won't ever find it, but it won't be within 30 seconds. 
+Doesn't mean they won't ever find it, or that there are not other ways of finding out however the name doesn't have to give it away. And it's one less signal. What is the benefit for your organisation to have this in the name?
 
 **The takeaway** 
+
 Naming does not have to disclose function or privilege level. It can at least require some thought.
 
 This brings me to the next point.
@@ -89,6 +91,7 @@ There is of course also **Role Assignable Groups**, which can be configured as w
 However in essence **keep it simple**. Avoid overengineering, I would just do direct assignment. These BG accounts shouldn't create that much overhead, and everyone in the IT organisation should know them. 
 
 **The takeaway** 
+
 Group-based exclusions introduce an additional control surface that can be modified with lower privileges. Direct assignment enforces a stricter privilege boundary, which aligns better with least privilege thinking.
 
 Please see documentation below to read further on Role Assignable Groups. Group-based exclusions create an additional control surface. The environment matters.
@@ -103,7 +106,7 @@ This is common practice. A break-the-glass account login is an emergency. Emerge
 
 To set monitoring see documentation below from Microsoft and a blog post from Jeffrey Appel.
 
-However another common mistake I see is that credentials are not renewed after an emergency sign in.
+However another common mistake I see is that credentials are not renewed after an emergency sign in. This is more of a process issue.
 
 ---
 
@@ -111,7 +114,11 @@ However another common mistake I see is that credentials are not renewed after a
 
 For further best practices I would suggest reading the Microsoft and NIST documentation below. This post isn't about best practices or a guide on how to set it up. The key takeaway is that you need emergency access and that ability shouldn't be easily taken away. By setting a proper naming convention, you would add valuable time before a malicious actor finds out which break-the-glass accounts exist in the environment. So even an additional 5 minutes of reconnaissance can make a difference for a SOC. After finding out the break-the-glass accounts, the actor would need to escalate their privileges to Security Administrator before removing your ability to get back into the tenant.
 
-For example, let's say the cookies for a persistent session of a super user with User Administrator privileges get stolen. It would take some time for that attacker to know which accounts are the break-the-glass accounts if a proper naming convention is used, if that attacker can figure it out at all with that level of privilege. And even if the attacker does find out, they would need a new role or a new user to remove your ability to get back into your tenant. With proper monitoring and security in place, that would likely have already triggered alerts and that user would have been blocked from the environment before finding out what the emergency accounts were.
+For example, let’s say the session cookies of a super user with User Administrator privileges are stolen. An attacker would still need to perform reconnaissance to identify which accounts are used for emergency access. A proper naming convention may slow this down slightly, but it should not be relied upon as a security control.
+
+With only User Administrator privileges, the attacker cannot directly remove high-privileged emergency accounts. They would need to escalate privileges or introduce a new identity to interfere with tenant recovery. This increases the number of required actions and therefore the likelihood of detection.
+
+However, this assumes that role assignments, PIM, and monitoring are properly configured. In many environments, this is not the case, and escalation or persistence may be easier than expected.
 
 ---
 
