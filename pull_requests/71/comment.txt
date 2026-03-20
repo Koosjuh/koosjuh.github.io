@@ -1,0 +1,1 @@
+Reverting this PR - switching to a different approach that fixes the theme template issues directly without pinning versions
