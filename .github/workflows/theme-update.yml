@@ -49,4 +49,3 @@ jobs:
         with:
           base: main
           title: Update theme
-          labels: automerge
