@@ -11,7 +11,7 @@ tags:
   - "PowerShell"
   - "SOC"
   - "Threat Hunting"
-draft: true
+draft: false
 toc: true
 menu:
   sidebar:
