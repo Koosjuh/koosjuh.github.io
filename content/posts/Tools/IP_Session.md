@@ -10,7 +10,10 @@ categories:
 tags:
   - "PowerShell"
   - "SOC"
-  - "Threat Hunting"
+  - "Triage"
+  - "VPN"
+  - "Investigation"
+  - "Create your own tools"
 draft: false
 toc: true
 menu:
@@ -494,19 +497,14 @@ Scamalytics fraud score and risk label.
 **Proxy/TOR/Datacenter**  
 Format is:
 
-```text
 VPN / TOR / Datacenter
-```
 
 **Provider**  
 Named provider attribution from ProxyCheck.
 
 **ProxyCheck VPN/Proxy**  
 Format is:
-
-```text
 VPN / Proxy
-```
 
 **First seen**  
 First observed VPN/proxy detection timestamp from ProxyCheck.
