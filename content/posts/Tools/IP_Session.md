@@ -1,9 +1,9 @@
 ---
-title: "IP Session Triage Tool for SOC Investigations"
+title: "IP Validation Tool"
 date: 2026-03-28
 hero: "/images/posts/ip-session-triage.png"
-description: "PowerShell-based SOC IP enrichment tool using Scamalytics and ProxyCheck with secure SecretVault integration."
-summary: "This tool generates structured SOC-ready IP triage output including location, ISP, VPN detection, and risk scoring using Scamalytics and ProxyCheck APIs with secure secret handling."
+description: "Tool I created to retreive some basic information about IP's to help with investigating Cyber Security Incidents. Whilest simultaniously learning Powershell Secret Management."
+summary: "This tool generates structured SOC ready IP triage output including location, ISP, VPN detection, and risk scoring using Scamalytics and ProxyCheck APIs with secure secret handling via Powershell Secret Management."
 categories:
   - "Security"
   - "Tools"
@@ -18,64 +18,47 @@ draft: false
 toc: true
 menu:
   sidebar:
-    name: "IP Session Triage"
-    identifier: "ip-session-triage"
+    name: "IP Validation Tool"
+    identifier: "ip-validation-tool"
     parent: "tools"
     weight: 10
 ---
 
-# IP Session Triage Tool for SOC Investigations
+# IP validation tool
 
-## Automated IP enrichment for fast session validation
+## Session validation
 
 ---
 
-During SOC investigations, validating whether an IP address is legitimate or suspicious is a repetitive but critical step. Analysts typically pivot between multiple tools to determine location, ISP ownership, VPN usage, proxy detection, and fraud risk. Besides it being very slow, it's also anoying when a reliable website that I used spur.us suddenly set a rate limit and changed their GUI.
+During my investigations when I have duty one of the most frequent things I do is validating sessions. Most of the time I investigate 2 types of entities: The user activity and the location it's from. The location investigation can become tedious as in the past I used Scamalytics and spur.us. Spur.us however changed their GUI and adjusted their limit rates, thus when I am on my corporate VPN I can never use spur.us because the night shift probably already used up all the API calls. One thing that verifies behaviour though is the VPN operator. Seeing "Nord VPN" for instance on sign in sessions 10x in the past and now for the 10th time this user generates an "Anonymous sign in", it helps to see that this is anonymous IP belongs to "Nord VPN".
 
-To streamline this workflow, I created a PowerShell based IP session tool that automatically generates a triage based on the properties of the IP address through scamalytics and proxycheck. The function queries Scamalytics for infrastructure properties and location, and ProxyCheck for VPN attribution. The results are merged into a structured format that can be pasted directly into investigation notes or incident timelines.
+So not being able to do this, or it takes 5 minutes longer per investigation is tedious to say the least. Something simple, should be simple and fast. To streamline this workflow, I created a PowerShell based IP session tool that generates a triage based on the properties of the IP address through scamalytics and proxycheck (my new spur). The function queries Scamalytics for infrastructure properties and location, and ProxyCheck for VPN attribution. The results are merged into a structured format that can be pasted directly into investigation notes or incident timelines.
 
-The tool also integrates with Microsoft PowerShell SecretManagement and SecretStore to securely store API keys. Secrets remain locked by default, are unlocked only during analyst usage, and automatically lock again after the configured timeout.
+The tool also integrates with Microsoft PowerShell SecretManagement and SecretStore to securely store API keys. Secrets remain locked by default, are unlocked only during analyst usage, and automatically lock again after the configured timeout. This is why I like blogging because this also forces me to think about handling secrets correctly. I am in no way shape or form a developer so if there is feedback if this can be better or safer or other ways please do comment and let me know!
 
-The sections below describe the setup, vault configuration, script, and usage examples.
+The sections below describes the setup, secretvault configuration, script, and usage examples. 
+
+**Disclaimer:** All api keys can (for the time being) be atained for `free`. The limits are of course low but in my case and I hope for your work/life balance as well, enough for 1 SOC analyst. 
 
 ## Get-ScamSpurTriage (Powershell Function)
 
 **Note**
-This is a legacy name. Spur does not support this, I now use Proxycheck.io.
 
-PowerShell function for SOC IP enrichment using:
+This is a legacy name. Spur does not support this, I now use Proxycheck.io. I like the name, for now it stays. :) Feel free to change the name and/or adjust the triage output to fit your style.
+
+**Requirements:** You need API keys for
 
 - **Scamalytics API v3** for location, ISP, risk score, and datacenter/TOR context
+   - [Scamalytics](https://scamalytics.com/ip/api/enquiry?monthly_api_calls=5000 "Scamalytics IP Location & Infrastructure API")
+   - Here you will receive an `API User` and `API Key`.
 - **ProxyCheck v3** for VPN provider attribution, VPN/proxy confirmation, and first-seen timestamp
+   - [ProxyCheck](https://proxycheck.io "Proxy/VPN detection API")
+   - Here you will receive an `API Key`
 - **Microsoft PowerShell SecretManagement / SecretStore** for secure local secret retrieval
 
-## Current vault model
+Free tier is sufficient for 1 soc analyst. Do not use per department or team. This is for a single user. If you want this for a whole SOC the free tier will not suffice.
 
-This setup assumes:
-
-- Vault name is **`SecretVault`**
-- The vault uses **Password** authentication
-- The vault needs to be unlocked by the SecretVault password once every 4 hours
-- Safe Password for SecretVault in a **Password Manager**
-- Timeout is **4 hours** per shift
-- First time running this script will ask for password for SecretVault to unlock it. Then it will lock after 4 hours.
-
-This means the vault is:
-
-- locked by default
-- unlocked when the script runs
-- available for the duration of the shift
-- automatically locked again when the timeout expires
-
-## Required secret names
-
-Store these secrets in `SecretVault`:
-
-- `ScamalyticsUser`
-- `ScamalyticsKey`
-- `ProxyCheckKey`
-
-## Prerequisites
+### Prerequisites
 
 Install the required modules:
 
@@ -83,8 +66,33 @@ Install the required modules:
 Install-Module Microsoft.PowerShell.SecretManagement -Scope CurrentUser
 Install-Module Microsoft.PowerShell.SecretStore -Scope CurrentUser
 ```
+### Current vault model
 
-## Vault registration
+This setup assumes:
+
+- Vault name is **`SecretVault`** 
+- The vault uses **Password** authentication
+- The vault needs to be unlocked by the SecretVault password once every `4 hours`
+- Timeout is **4 hours**
+- First time running this script will ask for password for SecretVault to unlock it. Then it will either timeout after 4 hours or if you stop the terminal session you will need to unlock it again.
+
+#### Required secret names
+
+Store these secrets in `SecretVault`:
+
+- `ScamalyticsUser`
+- `ScamalyticsKey`
+- `ProxyCheckKey`
+
+You will end up with:
+
+- a Vault that is locked by default
+- Can only be unlocked by password in current user session
+- Unlock required once per session (session assumes a SOC shift of 4 hours, please do adjust to your needs)
+- Auto-lock after 4 hours or if the session is terminated
+- Store the secretvault password in your password manager of choice.
+
+#### Vault registration
 
 If not already done:
 
@@ -92,7 +100,7 @@ If not already done:
 Register-SecretVault -Name SecretVault -ModuleName Microsoft.PowerShell.SecretStore -DefaultVault
 ```
 
-## SecretStore configuration
+#### SecretStore configuration
 
 ```powershell
 Set-SecretStoreConfiguration `
@@ -101,15 +109,7 @@ Set-SecretStoreConfiguration `
     -Interaction Prompt
 ```
 
-This means:
-
-- Vault locked by default
-- Can only be unlocked by password in current user session
-- Unlock required once per session
-- Auto-lock after 4 hours
-- No password stored anywhere
-
-## Store the API secrets in the vault
+#### Store the API secrets in the vault
 
 ```powershell
 Set-Secret -Vault SecretVault -Name ScamalyticsUser -Secret "YOUR_SCAMALYTICS_USER"
@@ -123,7 +123,7 @@ Set-Secret -Vault SecretVault -Name ScamalyticsKey -Secret "YOUR_SCAMALYTICS_KEY
 Set-Secret -Vault SecretVault -Name ProxyCheckKey -Secret "YOUR_PROXYCHECK_KEY"
 ```
 
-## Script
+### Script
 
 ```powershell
 function Get-ScamSpurTriage {
@@ -444,7 +444,7 @@ function Get-ScamSpurTriage {
 }
 ```
 
-## Usage
+## How to use
 
 ### Interactive input
 
@@ -483,6 +483,15 @@ Get-ScamSpurTriage -IPs "1.1.1.1" -Verbose
 - First seen: 2026-02-05
 ```
 
+### Operational flow
+
+1. Start script/function
+2. Unlock vault with password pasted from password manager
+3. Secrets retrieved from SecretVault
+4. Execute function
+5. Triage generated
+6. Vault auto-locks after 4 hours or when session is terminated
+
 ## Field explanation
 
 **Location**  
@@ -508,35 +517,3 @@ VPN / Proxy
 
 **First seen**  
 First observed VPN/proxy detection timestamp from ProxyCheck.
-
-## Operational flow
-
-1. Unlock vault
-2. Run function
-3. Secrets retrieved from SecretVault
-4. IP enrichment executed
-5. Output generated
-6. Vault auto-locks after 4 hours
-
-# Requirements
-
-You need API keys for:
-
-## Scamalytics
-
-https://scamalytics.com/ip/api/enquiry?monthly_api_calls=5000
-
-You will receive:
-
-- API User
-- API Key
-
-## ProxyCheck
-
-https://proxycheck.io
-
-You will receive:
-
-- ProxyCheck API key
-
-Free tier is sufficient for 1 soc analyst. Do not use per department or team. This is for a single user.
