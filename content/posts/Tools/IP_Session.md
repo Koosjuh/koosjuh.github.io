@@ -89,7 +89,7 @@ Store these secrets in `SecretVault`:
 
 You will end up with:
 
-- a Vault that is locked by default
+- Vault that is locked by default
 - Can only be unlocked by password in current user session
 - Unlock required once per session (session assumes a SOC shift of 4 hours, please do adjust to your needs)
 - Auto-lock after 4 hours or if the session is terminated
