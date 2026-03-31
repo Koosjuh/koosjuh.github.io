@@ -105,7 +105,9 @@ Register-SecretVault -Name SecretVault -ModuleName Microsoft.PowerShell.SecretSt
 
 #### SecretStore configuration
 
-This configuration sets the PowerShell SecretStore to use password authentication with an interactive prompt and unlocks the vault for 4 hours. When a secret is accessed and the store is locked, PowerShell prompts for the password, after which all secrets in the SecretStore backend become available until the timeout expires. The setting applies to the SecretStore backend, meaning all vaults registered using `Microsoft.PowerShell.SecretStore` have this configuration applied. No other vault types are affected such as Az.Keyvault or any other vault with an API. After the timeout, the store locks again and requires the password to continue. (Like I mentioned already 4 times) 
+This configuration sets the PowerShell SecretStore to use password authentication with an interactive prompt and unlocks the vault for 4 hours. When a secret is accessed and the store is locked, PowerShell prompts for the password, after which all secrets in the SecretStore backend become available until the timeout expires. 
+
+The setting applies to the SecretStore backend, meaning all vaults registered using `Microsoft.PowerShell.SecretStore` have this configuration applied. No other vault types are affected such as Az.Keyvault or any other vault with an API. After the timeout, the store locks again and requires the password to continue. (Like I mentioned already 4 times) 
 
 ```powershell
 Set-SecretStoreConfiguration `
@@ -760,7 +762,7 @@ function Get-ScamSpurTriage {
 
 ## How to use
 
-**Note**: IP v4 van be with out "" however IPv6 needs to be with in quottes.
+**Note**: IP v4 can be with or with out quotes however `IPv6` needs to be with in quotes.
 
 ### Interactive input
 
@@ -821,19 +823,19 @@ The labels shown in the header provide a quick classification of the IP address.
 
 Examples:
 
-Datacenter
-VPN
-VPN: NordVPN
-TOR
-Proxy
-Google Infrastructure
-Microsoft Infrastructure
-AWS
-Search Engine Robot
-Blacklist: Firehol
-Blacklist: Spamhaus
+- Datacenter
+- VPN
+- VPN: NordVPN
+- TOR
+- Proxy
+- Google Infrastructure
+- Microsoft Infrastructure
+- AWS
+- Search Engine Robot
+- Blacklist: Firehol
+- Blacklist: Spamhaus
 
-These labels are meant to give an immediate triage verdict.
+These labels are meant to give more context to the type of IP.
 
 **Location**
 
@@ -841,7 +843,7 @@ Geolocation of the IP address. Primarily derived from Scamalytics external data 
 
 Format:
 
-City, Country
+- City, Country
 
 **ISP**
 
@@ -849,25 +851,23 @@ Primary ISP or ASN owner of the IP address. This is typically the infrastructure
 
 Examples:
 
-Microsoft Corporation
-Google LLC
-Amazon Technologies Inc.
-Datacamp Limited
+- Microsoft Corporation
+- Google LLC
+- Amazon Technologies Inc.
+- Datacamp Limited
 
-**Subtype(s)**
+**{Provider}: Connection**
 
-Additional contextual classification that does not change the primary label but provides extra detail.
+Gives context to the connection type such as a Home ISP or a Wireless connection. **NOTE**: Please take into account that different providers can give different connection type. Please investigate what is appropiate in your situation. AbuseIPDB might give a wiress verdict and Scamalytics might say Residential. Adjust the triage if needed.
 
-Examples:
+Example:
 
-CDN
-Anonymous
-Residential
-Mobile
-Public Proxy
-Web Proxy
-
-These are derived from Scamalytics, ProxyCheck, and AbuseIPDB usage type hints.
+- Residential
+    - (Home Use)
+- Wireless
+    - (Mobile Use)
+- Hosting
+    - (Datacenter)
 
 **Risk**
 
@@ -875,11 +875,11 @@ Scamalytics fraud risk score and classification.
 
 Format:
 
-[score] (risk level)
+- [score] (risk level)
 
 Example:
 
-100 (very high)
+- 100 (very high)
 
 **Provider**
 
@@ -887,14 +887,14 @@ VPN or proxy operator attribution from ProxyCheck. When a provider is identified
 
 Examples:
 
-NordVPN
-Mullvad
-ProtonVPN
-TOR
+- NordVPN
+- Mullvad
+- ProtonVPN
+- TOR
 
 Header example:
 
-[VPN: NordVPN]
+- [VPN: NordVPN]
 
 **ProxyCheck VPN/Proxy**
 
@@ -902,11 +902,11 @@ Boolean detection from ProxyCheck indicating whether the IP is detected as a VPN
 
 Format:
 
-VPN / Proxy
+- VPN / Proxy
 
 Example:
 
-True / False
+- True / False
 
 **First seen**
 
@@ -922,7 +922,7 @@ Abuse confidence score from AbuseIPDB. Higher values indicate stronger consensus
 
 Range:
 
-0–100
+- 0–100
 
 **AbuseIPDB reports**
 
@@ -930,7 +930,7 @@ Number of reports submitted to AbuseIPDB within the configured time window (defa
 
 Format:
 
-X in last 90 days
+- X in last 90 days
 
 **AbuseIPDB last reported**
 
@@ -942,10 +942,10 @@ Infrastructure classification provided by AbuseIPDB.
 
 Examples:
 
-Data Center/Web Hosting/Transit
-Content Delivery Network
-Fixed Line ISP
-Search Engine Spider
+- Data Center/Web Hosting/Transit
+- Content Delivery Network
+- Fixed Line ISP
+- Search Engine Spider
 
 This may also influence subtype classification.
 
@@ -955,9 +955,9 @@ Domain associated with the IP address according to AbuseIPDB. Often useful for i
 
 Examples:
 
-google.com
-microsoft.com
-amazon.com
+- google.com
+- microsoft.com
+- amazon.com
 
 **AbuseIPDB whitelisted**
 
@@ -965,7 +965,7 @@ Indicates whether the IP belongs to a trusted infrastructure block maintained by
 
 Whitelisted IPs may still be abused because they often belong to large cloud or CDN providers.
 
-When true, an additional warning is shown.
+When true, an additional warning is shown. This can be removed in the triage, depending on need. This serves more as a additional context for me (the analyst).
 
 **AbuseIPDB latest categories**
 
@@ -973,8 +973,8 @@ Unique abuse categories extracted from the most recent AbuseIPDB reports (latest
 
 Examples:
 
-Port Scan
-Brute-Force
-Bad Web Bot
-Exploited Host
-Web App Attack
+- Port Scan
+- Brute-Force
+- Bad Web Bot
+- Exploited Host
+- Web App Attack
