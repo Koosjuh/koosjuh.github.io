@@ -70,7 +70,7 @@ This reflects the posture that Defender Vulnerability Management reports through
 
 ### KQL Query
 
-```kql
+```sql
 let scids = dynamic([
 "scid-2500","scid-2501","scid-2502","scid-2503","scid-2504","scid-2505",
 "scid-2506","scid-2507","scid-2508","scid-2509","scid-2510","scid-2511",
