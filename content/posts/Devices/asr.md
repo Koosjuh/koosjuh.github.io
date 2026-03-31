@@ -71,9 +71,14 @@ This reflects the posture that Defender Vulnerability Management reports through
 ### KQL Query
 
 ```kql
+let scids = dynamic([
+"scid-2500","scid-2501","scid-2502","scid-2503","scid-2504","scid-2505",
+"scid-2506","scid-2507","scid-2508","scid-2509","scid-2510","scid-2511",
+"scid-2512","scid-2513","scid-2514","scid-2515","scid-2516","scid-2517",
+"scid-2518","scid-2021","scid-2010","scid-2080"
+]);
 DeviceTvmSecureConfigurationAssessment
-| where ConfigurationId in ( "scid-2500","scid-2501","scid-2502","scid-2503","scid-2504","scid-2505","scid-2506","scid-2507", "scid-2508","scid-2509","scid-2510","scid-2511","scid-2512","scid-2513","scid-2514","scid-2515","scid-2516","scid-2517","scid-2518","scid-2021","scid-2010","scid-2080"
-)
+| where ConfigurationId in (scids)
 | extend Test = case(
     ConfigurationId == "scid-2010", "AntivirusEnabled",
     ConfigurationId == "scid-2500", "BlockMailExe",
