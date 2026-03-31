@@ -97,13 +97,15 @@ You will end up with:
 
 #### Vault registration
 
-If not already done:
+Now we create the `SecretVault` with the following command:
 
 ```powershell
 Register-SecretVault -Name SecretVault -ModuleName Microsoft.PowerShell.SecretStore -DefaultVault
 ```
 
 #### SecretStore configuration
+
+This configuration sets the PowerShell SecretStore to use password authentication with an interactive prompt and unlocks the vault for 4 hours. When a secret is accessed and the store is locked, PowerShell prompts for the password, after which all secrets in the SecretStore backend become available until the timeout expires. The setting applies to the SecretStore backend, meaning all vaults registered using `Microsoft.PowerShell.SecretStore` have this configuration applied. No other vault types are affected such as Az.Keyvault or any other vault with an API. After the timeout, the store locks again and requires the password to continue. (Like I mentioned already 4 times) 
 
 ```powershell
 Set-SecretStoreConfiguration `
