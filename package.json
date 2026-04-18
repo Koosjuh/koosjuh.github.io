@@ -54,8 +54,5 @@
     "typeit": "^8.8.7"
   },
   "name": "koosjanse.com",
-  "version": "0.1.0",
-  "workspaces": [
-    "packages/hugoautogen"
-  ]
+  "version": "0.1.0"
 }
