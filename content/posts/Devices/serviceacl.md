@@ -23,8 +23,6 @@ menu:
     weight: 10
 ---
 
-# Finding Weak Service Executable Paths with Defender TVM and PowerShell
-
 Most organizations focus on vulnerabilities, missing patches, exposed services and risky configurations. That is good, it can in all cases always be even better.
 
 However, one of the the more practical privilege escalation risks is often overlooked because they are hard to spot:
@@ -47,7 +45,7 @@ But as always: do not just accept the recommendation blindly. Because just becau
 
 So where do we start? First check what is actually exposed.
 
-# Why
+## Why
 
 A weak service executable path can matter in several scenarios:
 
@@ -79,7 +77,7 @@ Most of these folders go unnoticed because in general they slowly grow as most o
 
 This can be quite a daunting task however I wrote a KQL and a powershell script that, depending on how you want to put this in operation might need adjusting, can help with the tedious check of checking ACL permissions.
 
-# Workflow
+## Workflow
 
 The workflow is straightforward:
 
@@ -94,7 +92,7 @@ The KQL tells you which folders Defender is concerned about.
 
 The PowerShell collects the ACL evidence needed to determine whether those folders are writable by broad principals. You as the engineer need to make the decission if this is according to least privilege. 
 
-# Step 1: Find services outside common protected locations
+### Find services outside common protected locations
 
 Use the following KQL in Microsoft Defender Advanced Hunting.
 
@@ -145,6 +143,8 @@ This query:
 - ExecutableDirectory
 - Provides the exact folders that should be reviewed.
 
+#### KQL output 
+
 Example:
 
 | DeviceName | ServiceName | ExecutablePath | BaseFolder | ExecutableDirectory |
@@ -156,7 +156,7 @@ Example:
 | ENG-LT-077 | AzureDevOpsAgent | D:\azuredevops\a01\bin\AgentService.exe | D:\azuredevops | D:\azuredevops\a01\bin |
 | APP-LT-041 | OracleServiceXE | C:\Oracle\product\21c\dbhomeXE\bin\oracle.exe | C:\Oracle | C:\Oracle\product\21c\dbhomeXE\bin |
 
-# Step 2: Copy the unique BaseFolder values
+### Transfer from the Defender portal to Local on the device
 
 From the KQL output, copy the `ServiceName`, `ExecutableDirectory` & `BaseFolder` values for the affected device. into the array below in the powershell.
 
@@ -409,7 +409,7 @@ $AclReport |
     Format-Table -AutoSize
 ```
 
-# Example of Output
+#### Example of Output
 
 <div style="overflow-x:auto;">
 
@@ -438,7 +438,7 @@ $AclReport |
 
 </div>
 
-# What to look for
+## What to look for
 
 The most important thing to review is whether broad principals have write-capable permissions.
 
@@ -461,11 +461,11 @@ BUILTIN\Users    ReadAndExecute
 
 are generally less concerning. Still use your best judgement and take into context the product we are reviewing, is it least privilege? If not, can we change it? Or can we accept the risk. Also take into account that 
 
-# Deployment options
+## Deployment options
 
 There are several operational ways to deploy this at scale.
 
-## Option 1: Manual assessment
+### Option 1: Manual assessment
 
 Best for:
 - one-off reviews
@@ -481,7 +481,7 @@ Workflow:
 
 This is the simplest approach.
 
-## Option 2: Intune deployment with local CSV output
+### Option 2: Intune deployment with local CSV output
 
 Workflow:
 
@@ -496,7 +496,7 @@ Workflow:
    - RMM tooling
    - remote collection methods
 
-## Option 3: Centralized ingestion into Sentinel or Log Analytics
+### Option 3: Centralized ingestion into Sentinel or Log Analytics
 
 Best for:
 - large environments
@@ -518,7 +518,7 @@ This allows:
 - potential alerting
 - Centralized information for decision making
 
-# Important nuance
+## Important nuance
 
 Do not blindly remediate this recommendation. The presence of this finding does not automatically mean something is exploitable or insecure, but it does warrant review.
 
@@ -598,7 +598,7 @@ That does not mean every finding is immediately exploitable.
 
 But it absolutely means the finding deserves review.
 
-# Final thought
+## Final thought
 
 This Defender recommendation is useful, but the real value is not the recommendation itself.
 
