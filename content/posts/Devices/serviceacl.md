@@ -160,13 +160,53 @@ Example:
 
 From the KQL output, copy the `ServiceName`, `ExecutableDirectory` & `BaseFolder` values for the affected device. into the array below in the powershell.
 
+Below is an example of multiple entries:
+
+```powershell
+$ServicePathsToCheck = @(
+    [PSCustomObject]@{
+        ServiceName         = 'battlenet_helpersvc'
+        BaseFolder          = 'C:\ProgramData'
+        ExecutableDirectory = 'C:\ProgramData\Battle.net_components\battlenet_helpersvc'
+    },
+
+    [PSCustomObject]@{
+        ServiceName         = 'EABackgroundService'
+        BaseFolder          = 'D:\Program Files'
+        ExecutableDirectory = 'D:\Program Files\EA\DesktopApp\EA Desktop'
+    },
+
+    [PSCustomObject]@{
+        ServiceName         = 'MDCoreSvc'
+        BaseFolder          = 'C:\ProgramData'
+        ExecutableDirectory = 'C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.26030.3011-0'
+    },
+
+    [PSCustomObject]@{
+        ServiceName         = 'TempTestService'
+        BaseFolder          = 'C:\Temp'
+        ExecutableDirectory = 'C:\Temp\TestService'
+    },
+
+    [PSCustomObject]@{
+        ServiceName         = 'WdNisSvc'
+        BaseFolder          = 'C:\ProgramData'
+        ExecutableDirectory = 'C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.26030.3011-0'
+    },
+
+    [PSCustomObject]@{
+        ServiceName         = 'WinDefend'
+        BaseFolder          = 'C:\ProgramData'
+        ExecutableDirectory = 'C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.26030.3011-0'
+    }
+)
+```
+
 Also note that below `$ServicePathsToCheck` is `$EnableRecursiveCheck = $false`.
 
 This can be set to `$true`, which will scan all folders recursively.
 
 Because of obvious resource considerations, recursive scanning is disabled by default. However, if needed, the script can also be used recursively.
-
-Example:
 
 ```powershell
 $ServicePathsToCheck = @(
@@ -371,6 +411,8 @@ $AclReport |
 
 # Example of Output
 
+<div style="overflow-x:auto;">
+
 | ComputerName | ServiceName | BaseFolder | ExecutableDirectory | CheckedPath | PathType | Owner | InheritanceEnabled | IdentityReference | IdentitySid | FileSystemRights | AccessControlType | IsInherited | InheritanceFlags | PropagationFlags |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Host-01 | battlenet_helpersvc | C:\ProgramData | C:\ProgramData\Battle.net_components\battlenet_helpersvc | C:\ProgramData | BaseFolder | NT AUTHORITY\SYSTEM | FALSE | BUILTIN\Administrators | S-1-5-32-544 | FullControl | Allow | FALSE | ContainerInherit, ObjectInherit | None |
@@ -393,6 +435,8 @@ $AclReport |
 | Host-01 | TempTestService | C:\Temp | C:\Temp | C:\Temp | ExecutableDirectory | BUILTIN\Administrators | TRUE | NT AUTHORITY\SYSTEM | S-1-5-18 | FullControl | Allow | TRUE | ContainerInherit, ObjectInherit | None |
 | Host-01 | WinDefend | C:\ProgramData | C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.26030.3011-0 | C:\ProgramData | BaseFolder | NT AUTHORITY\SYSTEM | FALSE | BUILTIN\Administrators | S-1-5-32-544 | FullControl | Allow | FALSE | ContainerInherit, ObjectInherit | None |
 | Host-01 | WinDefend | C:\ProgramData | C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.26030.3011-0 | C:\ProgramData | BaseFolder | NT AUTHORITY\SYSTEM | FALSE | BUILTIN\Users | S-1-5-32-545 | Write | Allow | FALSE | ContainerInherit | None |
+
+</div>
 
 # What to look for
 
