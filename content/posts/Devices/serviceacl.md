@@ -5,8 +5,7 @@ hero: "/images/posts/service-executable-path-acl.png"
 description: "How to validate Microsoft Defender's service executable path recommendation by checking real folder ACLs."
 summary: "Microsoft Defender can flag services that run outside common protected locations. This post shows how to use KQL to identify the affected service paths and PowerShell to validate whether the base folders are writable by broad user groups."
 categories:
-  - "Microsoft Defender"
-  - "Security Hardening"
+  - "Devices"
 tags:
   - "Defender for Endpoint"
   - "Defender Vulnerability Management"
