@@ -1,6 +1,6 @@
 ---
 title: "Finding Weak Service Executable Paths with Defender TVM and PowerShell"
-date: 2026-05-11
+date: 2026-05-08
 hero: "/images/posts/service-executable-path-acl.png"
 description: "How to validate Microsoft Defender's service executable path recommendation by checking real folder ACLs."
 summary: "Microsoft Defender can flag services that run outside common protected locations. This post shows how to use KQL to identify the affected service paths and PowerShell to validate whether the base folders are writable by broad user groups."
