@@ -26,6 +26,12 @@ menu:
 
 # IP validation tool
 
+## Updates
+
+| Date       | Update                                                                                                                                                      |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-06-17 | Added AzureSpeed integration to enrich Microsoft Infrastructure IP addresses with Azure Service Tag, Region, Address Prefix and System Service information. |
+
 ## Session validation
 
 ---
@@ -97,17 +103,13 @@ You will end up with:
 
 #### Vault registration
 
-Now we create the `SecretVault` with the following command:
+If not already done:
 
 ```powershell
 Register-SecretVault -Name SecretVault -ModuleName Microsoft.PowerShell.SecretStore -DefaultVault
 ```
 
 #### SecretStore configuration
-
-This configuration sets the PowerShell SecretStore to use password authentication with an interactive prompt and unlocks the vault for 4 hours. When a secret is accessed and the store is locked, PowerShell prompts for the password, after which all secrets in the SecretStore backend become available until the timeout expires. 
-
-The setting applies to the SecretStore backend, meaning all vaults registered using `Microsoft.PowerShell.SecretStore` have this configuration applied. No other vault types are affected such as Az.Keyvault or any other vault with an API. After the timeout, the store locks again and requires the password to continue. (Like I mentioned already 4 times) 
 
 ```powershell
 Set-SecretStoreConfiguration `
@@ -231,6 +233,78 @@ function Get-ScamSpurTriage {
         }
     }
 
+    function Get-FirstNonEmptyValue {
+        param(
+            [Parameter(Mandatory = $false)]
+            [object[]]$Values
+        )
+
+        foreach ($value in $Values) {
+            if ($null -eq $value) {
+                continue
+            }
+
+            $text = ([string]$value).Trim()
+
+            if ([string]::IsNullOrWhiteSpace($text)) {
+                continue
+            }
+
+            $normalized = $text.ToLowerInvariant()
+
+            if (
+                $normalized -match 'premium field' -or
+                $normalized -match 'upgrade to view' -or
+                $normalized -eq 'n/a' -or
+                $normalized -eq 'na' -or
+                $normalized -eq 'unknown' -or
+                $normalized -eq 'null' -or
+                $normalized -eq 'none' -or
+                $normalized -eq 'not available' -or
+                $normalized -eq 'unavailable'
+            ) {
+                continue
+            }
+
+            return $text
+        }
+
+        return $null
+    }
+
+    function Join-LocationParts {
+        param(
+            [Parameter(Mandatory = $false)]
+            [string]$City,
+
+            [Parameter(Mandatory = $false)]
+            [string]$Region,
+
+            [Parameter(Mandatory = $false)]
+            [string]$Country
+        )
+
+        $parts = New-Object 'System.Collections.Generic.List[string]'
+
+        if (-not [string]::IsNullOrWhiteSpace($City)) {
+            [void]$parts.Add($City.Trim())
+        }
+
+        if (-not [string]::IsNullOrWhiteSpace($Region) -and $Region.Trim() -notin $parts) {
+            [void]$parts.Add($Region.Trim())
+        }
+
+        if (-not [string]::IsNullOrWhiteSpace($Country) -and $Country.Trim() -notin $parts) {
+            [void]$parts.Add($Country.Trim())
+        }
+
+        if ($parts.Count -gt 0) {
+            return ($parts -join ", ")
+        }
+
+        return $null
+    }
+
     function Convert-AbuseIPDBCategory {
         param(
             [Parameter(Mandatory = $true)]
@@ -318,6 +392,12 @@ function Get-ScamSpurTriage {
         $subTypes = New-Object 'System.Collections.Generic.List[string]'
         $abuseLatestCategories = New-Object 'System.Collections.Generic.List[string]'
 
+        $scam = $null
+        $ext = $null
+        $pcResp = $null
+        $pcData = $null
+        $abuse = $null
+
         try {
             $scamUrl = "${BaseUrl}/${ApiUser}/?key=${ApiKey}&ip=${ip}"
             Write-Verbose "Requesting Scamalytics for ${ip}"
@@ -338,45 +418,38 @@ function Get-ScamSpurTriage {
                     $risk = [string]$scam.scamalytics_risk
                 }
 
-                $dbip = $ext.dbip
-                $mm   = $ext.maxmind_geolite2
+                $dbip   = $ext.dbip
+                $mm     = $ext.maxmind_geolite2
+                $ipinfo = $ext.ipinfo
 
-                $city = $null
-                $country = $null
+                $city = Get-FirstNonEmptyValue @(
+                    $dbip.ip_city
+                    $mm.ip_city
+                    $ipinfo.ip_city
+                )
 
-                if ($dbip) {
-                    if (-not [string]::IsNullOrWhiteSpace([string]$dbip.ip_city)) {
-                        $city = [string]$dbip.ip_city
-                    }
-                    if (-not [string]::IsNullOrWhiteSpace([string]$dbip.ip_country_name)) {
-                        $country = [string]$dbip.ip_country_name
-                    }
-                }
+                $region = Get-FirstNonEmptyValue @(
+                    $dbip.ip_region_name
+                    $mm.ip_subdivision_name
+                    $ipinfo.ip_region
+                )
 
-                if ([string]::IsNullOrWhiteSpace($city) -and $mm -and -not [string]::IsNullOrWhiteSpace([string]$mm.ip_city)) {
-                    $city = [string]$mm.ip_city
-                }
+                $country = Get-FirstNonEmptyValue @(
+                    $dbip.ip_country_name
+                    $mm.ip_country_name
+                    $ipinfo.ip_country_name
+                    $ipinfo.ip_country
+                )
 
-                if ([string]::IsNullOrWhiteSpace($country) -and $mm -and -not [string]::IsNullOrWhiteSpace([string]$mm.ip_country_name)) {
-                    $country = [string]$mm.ip_country_name
-                }
+                $location = Join-LocationParts -City $city -Region $region -Country $country
 
-                if (-not [string]::IsNullOrWhiteSpace($city) -and -not [string]::IsNullOrWhiteSpace($country)) {
-                    $location = "$city, $country"
-                }
-                elseif (-not [string]::IsNullOrWhiteSpace($country)) {
-                    $location = $country
-                }
-
-                if ($dbip -and -not [string]::IsNullOrWhiteSpace([string]$dbip.isp_name)) {
-                    $isp = [string]$dbip.isp_name
-                }
-                elseif (-not [string]::IsNullOrWhiteSpace([string]$scam.scamalytics_isp)) {
-                    $isp = [string]$scam.scamalytics_isp
-                }
-                elseif ($mm -and -not [string]::IsNullOrWhiteSpace([string]$mm.as_name)) {
-                    $isp = [string]$mm.as_name
-                }
+                $isp = Get-FirstNonEmptyValue @(
+                    $dbip.isp_name
+                    $scam.scamalytics_isp
+                    $mm.as_name
+                    $ipinfo.as_name
+                    $ipinfo.isp
+                )
 
                 if ($scam.scamalytics_proxy.is_datacenter -eq $true) {
                     Add-UniqueItem $labels "Datacenter"
@@ -394,10 +467,11 @@ function Get-ScamSpurTriage {
                     Add-UniqueItem $labels "AWS"
                 }
 
-                if ($scam.scamalytics_isp -match "Microsoft" -or
-                    $ext.maxmind_geolite2.as_name -match "Microsoft" -or
-                    $ext.ipinfo.as_name -match "Microsoft") {
-
+                if (
+                    ([string]$scam.scamalytics_isp -match "Microsoft") -or
+                    ([string]$ext.maxmind_geolite2.as_name -match "Microsoft") -or
+                    ([string]$ext.ipinfo.as_name -match "Microsoft")
+                ) {
                     Add-UniqueItem $labels "Microsoft Infrastructure"
                 }
 
@@ -576,22 +650,6 @@ function Get-ScamSpurTriage {
                         }
                         Add-UniqueItem $labels "VPN: $provider"
                     }
-
-                    if ([string]::IsNullOrWhiteSpace($location) -and $null -ne $pcData.location) {
-                        $pcCity = [string]$pcData.location.city_name
-                        $pcCountry = [string]$pcData.location.country_name
-
-                        if (-not [string]::IsNullOrWhiteSpace($pcCity) -and -not [string]::IsNullOrWhiteSpace($pcCountry)) {
-                            $location = "$pcCity, $pcCountry"
-                        }
-                        elseif (-not [string]::IsNullOrWhiteSpace($pcCountry)) {
-                            $location = $pcCountry
-                        }
-                    }
-
-                    if ([string]::IsNullOrWhiteSpace($isp) -and $null -ne $pcData.network -and -not [string]::IsNullOrWhiteSpace([string]$pcData.network.provider)) {
-                        $isp = [string]$pcData.network.provider
-                    }
                 }
                 else {
                     Write-Verbose "ProxyCheck returned status ok, but no IP result block was found for ${ip}"
@@ -626,14 +684,6 @@ function Get-ScamSpurTriage {
                 $abuseUsageType = $abuse.usageType
                 $abuseDomain = $abuse.domain
                 $abuseWhitelisted = $abuse.isWhitelisted
-
-                if ([string]::IsNullOrWhiteSpace($isp) -and -not [string]::IsNullOrWhiteSpace([string]$abuse.isp)) {
-                    $isp = [string]$abuse.isp
-                }
-
-                if ([string]::IsNullOrWhiteSpace($location) -and -not [string]::IsNullOrWhiteSpace([string]$abuse.countryName)) {
-                    $location = [string]$abuse.countryName
-                }
 
                 if ($abuse.isTor -eq $true) {
                     Add-UniqueItem $labels "TOR"
@@ -670,6 +720,49 @@ function Get-ScamSpurTriage {
             Write-Verbose "AbuseIPDB failed for ${ip}. $($_.Exception.Message)"
         }
 
+        if ([string]::IsNullOrWhiteSpace($location)) {
+            $pcCity = $null
+            $pcRegion = $null
+            $pcCountry = $null
+
+            if ($pcData -and $pcData.location) {
+                $pcCity = Get-FirstNonEmptyValue @(
+                    $pcData.location.city_name
+                    $pcData.location.city
+                )
+
+                $pcRegion = Get-FirstNonEmptyValue @(
+                    $pcData.location.region
+                    $pcData.location.region_name
+                    $pcData.location.state
+                )
+
+                $pcCountry = Get-FirstNonEmptyValue @(
+                    $pcData.location.country_name
+                    $pcData.location.country
+                )
+            }
+
+            $location = Join-LocationParts -City $pcCity -Region $pcRegion -Country $pcCountry
+        }
+
+        if ([string]::IsNullOrWhiteSpace($location) -and $abuse) {
+            $location = Join-LocationParts -Country (Get-FirstNonEmptyValue @(
+                $abuse.countryName
+                $abuse.countryCode
+            ))
+        }
+
+        if ([string]::IsNullOrWhiteSpace($isp)) {
+            $isp = Get-FirstNonEmptyValue @(
+                $pcData.network.provider
+                $pcData.network.organization
+                $pcData.provider
+                $abuse.isp
+                $abuse.domain
+            )
+        }
+
         $headerLabels = ($labels | ForEach-Object { "[$_]" }) -join " "
 
         if ([string]::IsNullOrWhiteSpace($headerLabels)) {
@@ -678,91 +771,97 @@ function Get-ScamSpurTriage {
         else {
             Write-Output "##### $headerLabels $ip"
         }
-        
+
         if (-not [string]::IsNullOrWhiteSpace($location)) {
-            Write-Output "- [Scamalytics] Location: $location"
+            Write-Output "- Location: $location"
         }
-        
+
         if (-not [string]::IsNullOrWhiteSpace($isp)) {
-            Write-Output "- [Scamalytics] ISP: $isp"
+            Write-Output "- ISP: $isp"
         }
-        
-        if ($ext -and $ext.dbip -and -not [string]::IsNullOrWhiteSpace([string]$ext.dbip.connection_type)) {
-            Write-Output "- [Scamalytics: Connection]: $([string]$ext.dbip.connection_type)"
+
+        $scamalyticsConnectionType = Get-FirstNonEmptyValue @(
+            $ext.dbip.connection_type
+        )
+
+        if (-not [string]::IsNullOrWhiteSpace($scamalyticsConnectionType)) {
+            Write-Output "- [Scamalytics: Connection]: $scamalyticsConnectionType"
         }
-        
-        if ($pcData -and $pcData.network -and -not [string]::IsNullOrWhiteSpace([string]$pcData.network.type)) {
-            Write-Output "- [ProxyCheck: Connection]: $([string]$pcData.network.type)"
+
+        if ($pcData -and $pcData.network) {
+            $proxyCheckConnectionType = Get-FirstNonEmptyValue @(
+                $pcData.network.type
+            )
+
+            if (-not [string]::IsNullOrWhiteSpace($proxyCheckConnectionType)) {
+                Write-Output "- [ProxyCheck: Connection]: $proxyCheckConnectionType"
+            }
         }
-        
+
         if (-not [string]::IsNullOrWhiteSpace([string]$abuseUsageType)) {
             Write-Output "- [AbuseIPDB: Usage]: $abuseUsageType"
         }
-        
-        ## Write-Output "- Labels: $(($labels -join ', '))"
-        
+
         if ($subTypes.Count -gt 0) {
             Write-Output "- [ProxyCheck] Subtype(s): $(($subTypes -join ', '))"
         }
-        
+
         if ($null -ne $score -or -not [string]::IsNullOrWhiteSpace($risk)) {
             $scoreText = if ($null -ne $score) { $score } else { "Unknown" }
             $riskText  = if (-not [string]::IsNullOrWhiteSpace($risk)) { $risk } else { "Unknown" }
             Write-Output "- [Scamalytics] risk: $scoreText ($riskText)"
         }
-        
+
         if (-not [string]::IsNullOrWhiteSpace($provider)) {
             Write-Output "- [ProxyCheck] Provider: $provider"
         }
-        
+
         if (-not [string]::IsNullOrWhiteSpace($proxyCheckVpnProxy)) {
             Write-Output "- [ProxyCheck] VPN/Proxy: $proxyCheckVpnProxy"
         }
-        
+
         if (-not [string]::IsNullOrWhiteSpace($firstSeen)) {
             Write-Output "- [ProxyCheck] first seen: $firstSeen"
         }
-        
+
         if (-not [string]::IsNullOrWhiteSpace($lastSeen)) {
             Write-Output "- [ProxyCheck] last seen: $lastSeen"
         }
-        
+
         if ($null -ne $abuseConfidence) {
             Write-Output "- [AbuseIPDB] confidence: $abuseConfidence"
         }
-        
+
         if ($null -ne $abuseReports) {
             Write-Output "- [AbuseIPDB] reports: $abuseReports in last $AbuseIPDBMaxAgeDays days"
         }
-        
+
         if ($abuseReports -gt 0 -and $abuseLastReported) {
             Write-Output "- [AbuseIPDB] last reported: $abuseLastReported"
         }
-        
+
         if (-not [string]::IsNullOrWhiteSpace([string]$abuseDomain)) {
             Write-Output "- [AbuseIPDB] domain: $abuseDomain"
         }
-        
+
         if ($null -ne $abuseWhitelisted) {
             Write-Output "- [AbuseIPDB] whitelisted: $abuseWhitelisted"
         }
-        
+
         if ($abuseWhitelisted -eq $true) {
             Write-Output "- [AbuseIPDB] IMPORTANT NOTE: IP is whitelisted. Whitelisted netblocks often belong to trusted providers but may still host abused cloud infrastructure. Validate context before trusting."
         }
-        
+
         if ($abuseLatestCategories.Count -gt 0) {
             Write-Output "- [AbuseIPDB] latest categories: $(($abuseLatestCategories -join ', '))"
         }
-        
+
         Write-Output ""
     }
 }
 ```
 
 ## How to use
-
-**Note**: IP v4 can be with or with out quotes however `IPv6` needs to be with in quotes.
 
 ### Interactive input
 
@@ -823,19 +922,19 @@ The labels shown in the header provide a quick classification of the IP address.
 
 Examples:
 
-- Datacenter
-- VPN
-- VPN: NordVPN
-- TOR
-- Proxy
-- Google Infrastructure
-- Microsoft Infrastructure
-- AWS
-- Search Engine Robot
-- Blacklist: Firehol
-- Blacklist: Spamhaus
+Datacenter
+VPN
+VPN: NordVPN
+TOR
+Proxy
+Google Infrastructure
+Microsoft Infrastructure
+AWS
+Search Engine Robot
+Blacklist: Firehol
+Blacklist: Spamhaus
 
-These labels are meant to give more context to the type of IP.
+These labels are meant to give an immediate triage verdict.
 
 **Location**
 
@@ -843,7 +942,7 @@ Geolocation of the IP address. Primarily derived from Scamalytics external data 
 
 Format:
 
-- City, Country
+City, Country
 
 **ISP**
 
@@ -851,23 +950,25 @@ Primary ISP or ASN owner of the IP address. This is typically the infrastructure
 
 Examples:
 
-- Microsoft Corporation
-- Google LLC
-- Amazon Technologies Inc.
-- Datacamp Limited
+Microsoft Corporation
+Google LLC
+Amazon Technologies Inc.
+Datacamp Limited
 
-**{Provider}: Connection**
+**Subtype(s)**
 
-Gives context to the connection type such as a Home ISP or a Wireless connection. **NOTE**: Please take into account that different providers can give different connection type. Please investigate what is appropiate in your situation. AbuseIPDB might give a wiress verdict and Scamalytics might say Residential. Adjust the triage if needed.
+Additional contextual classification that does not change the primary label but provides extra detail.
 
-Example:
+Examples:
 
-- Residential
-    - (Home Use)
-- Wireless
-    - (Mobile Use)
-- Hosting
-    - (Datacenter)
+CDN
+Anonymous
+Residential
+Mobile
+Public Proxy
+Web Proxy
+
+These are derived from Scamalytics, ProxyCheck, and AbuseIPDB usage type hints.
 
 **Risk**
 
@@ -875,11 +976,11 @@ Scamalytics fraud risk score and classification.
 
 Format:
 
-- [score] (risk level)
+[score] (risk level)
 
 Example:
 
-- 100 (very high)
+100 (very high)
 
 **Provider**
 
@@ -887,14 +988,14 @@ VPN or proxy operator attribution from ProxyCheck. When a provider is identified
 
 Examples:
 
-- NordVPN
-- Mullvad
-- ProtonVPN
-- TOR
+NordVPN
+Mullvad
+ProtonVPN
+TOR
 
 Header example:
 
-- [VPN: NordVPN]
+[VPN: NordVPN]
 
 **ProxyCheck VPN/Proxy**
 
@@ -902,11 +1003,11 @@ Boolean detection from ProxyCheck indicating whether the IP is detected as a VPN
 
 Format:
 
-- VPN / Proxy
+VPN / Proxy
 
 Example:
 
-- True / False
+True / False
 
 **First seen**
 
@@ -916,13 +1017,97 @@ First observed timestamp for VPN/proxy detection from ProxyCheck. Indicates when
 
 Most recent timestamp ProxyCheck observed the IP as VPN/proxy infrastructure. Useful to determine whether the detection is recent or stale. However I am debating if I should keep this because we are investigating an active incident thus the last seen for the analyst would of course be "now" however it can give additional context if the last seen is not recent. 
 
+## Azure Service Tag Enrichment
+
+When an IP address is identified as Microsoft-owned infrastructure, the tool automatically performs an Azure Service Tag lookup using AzureSpeed.
+
+This enrichment provides additional Azure-specific context that is normally unavailable from traditional reputation services.
+
+### Additional Fields
+
+| Field            | Description                                             |
+| ---------------- | ------------------------------------------------------- |
+| Service Tag      | Azure service identifier associated with the IP range   |
+| Address Prefix   | Azure subnet containing the IP                          |
+| Region           | Azure region where the range is registered              |
+| Region ID        | Internal Azure region identifier                        |
+| System Service   | Azure service associated with the range                 |
+| Network Features | Azure networking capabilities associated with the range |
+
+### Why This Matters
+
+Many Microsoft sign-ins originate from Azure infrastructure.
+
+Without Azure Service Tag validation, analysts may only see:
+
+* Microsoft Corporation
+* Microsoft Azure
+* Datacenter
+
+This provides limited context.
+
+With Azure Service Tag enrichment, analysts can determine whether an IP belongs to:
+
+* AzureActiveDirectory
+* AzureFrontDoor
+* AzureMonitor
+* AzureTrafficManager
+* AzureCloud
+* Storage
+* Sql
+* Microsoft Defender related services
+* Other Azure platform services
+
+This can significantly reduce false positives during sign-in investigations and help validate whether an IP is likely part of legitimate Microsoft infrastructure.
+
+### Example
+
+##### [Microsoft Infrastructure] 20.x.x.x
+
+* ISP: Microsoft Corporation
+* Location: Dublin, Ireland
+* [AzureSpeed] Service Tag: AzureActiveDirectory
+* [AzureSpeed] Region: northeurope
+* [AzureSpeed] Address Prefix: 20.x.x.x/28
+
+Interpretation:
+
+This IP belongs to Microsoft Entra ID infrastructure operating from the North Europe Azure region. Authentication activity originating from this address is generally expected Microsoft service traffic rather than a customer-hosted Azure virtual machine.
+
+### Analyst Guidance
+
+The presence of a Microsoft Infrastructure label alone should not be considered sufficient validation.
+
+Always review:
+
+* Azure Service Tag
+* Authentication result
+* MFA status
+* Device state
+* User behavior
+* Historical sign-in patterns
+
+Examples:
+
+| Service Tag          | Typical Interpretation                    |
+| -------------------- | ----------------------------------------- |
+| AzureActiveDirectory | Microsoft Entra ID service infrastructure |
+| AzureFrontDoor       | Microsoft reverse proxy / CDN             |
+| AzureMonitor         | Monitoring and telemetry infrastructure   |
+| AzureCloud           | Generic Azure workload space              |
+| Storage              | Azure Storage services                    |
+| Sql                  | Azure SQL services                        |
+
+A result of AzureCloud generally indicates generic Azure-hosted infrastructure and should be treated similarly to other cloud-hosted workloads until additional context is available.
+
+
 **AbuseIPDB confidence**
 
 Abuse confidence score from AbuseIPDB. Higher values indicate stronger consensus of malicious activity.
 
 Range:
 
-- 0–100
+0–100
 
 **AbuseIPDB reports**
 
@@ -930,7 +1115,7 @@ Number of reports submitted to AbuseIPDB within the configured time window (defa
 
 Format:
 
-- X in last 90 days
+X in last 90 days
 
 **AbuseIPDB last reported**
 
@@ -942,10 +1127,10 @@ Infrastructure classification provided by AbuseIPDB.
 
 Examples:
 
-- Data Center/Web Hosting/Transit
-- Content Delivery Network
-- Fixed Line ISP
-- Search Engine Spider
+Data Center/Web Hosting/Transit
+Content Delivery Network
+Fixed Line ISP
+Search Engine Spider
 
 This may also influence subtype classification.
 
@@ -955,9 +1140,9 @@ Domain associated with the IP address according to AbuseIPDB. Often useful for i
 
 Examples:
 
-- google.com
-- microsoft.com
-- amazon.com
+google.com
+microsoft.com
+amazon.com
 
 **AbuseIPDB whitelisted**
 
@@ -965,7 +1150,7 @@ Indicates whether the IP belongs to a trusted infrastructure block maintained by
 
 Whitelisted IPs may still be abused because they often belong to large cloud or CDN providers.
 
-When true, an additional warning is shown. This can be removed in the triage, depending on need. This serves more as a additional context for me (the analyst).
+When true, an additional warning is shown.
 
 **AbuseIPDB latest categories**
 
@@ -973,8 +1158,8 @@ Unique abuse categories extracted from the most recent AbuseIPDB reports (latest
 
 Examples:
 
-- Port Scan
-- Brute-Force
-- Bad Web Bot
-- Exploited Host
-- Web App Attack
+Port Scan
+Brute-Force
+Bad Web Bot
+Exploited Host
+Web App Attack
