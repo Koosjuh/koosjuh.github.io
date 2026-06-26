@@ -11,7 +11,7 @@ tags:
   - "Microsoft Entra"
   - "Chrome Extension"
   - "Tenant ID"
-draft: true
+draft: false
 toc: true
 menu:
   sidebar:
