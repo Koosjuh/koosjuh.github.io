@@ -23,6 +23,12 @@ menu:
 
 # tID Guard
 
+The latest version of **tID Guard** can be downloaded from the TeamPurple repository on GitHub:
+
+https://github.com/Koosjuh/TeamPurple/tree/main/Tools/tID%20Guard
+
+You can either clone the repository or download it as a ZIP file using **Code → Download ZIP**.
+
 ## Lightweight Tenant ID Guarding for Microsoft Entra Administrators
 
 If you work with Microsoft Entra every day, chances are you manage more than one tenant. Whether you're a consultant, MSP engineer, security analyst, or system administrator, switching between customer environments is simply part of the job.
@@ -120,7 +126,7 @@ Everything happens locally inside your browser.
 
 ## Installation
 
-1. Download or clone the repository.
+1. Download or clone the TeamPurple repository. (https://github.com/Koosjuh/TeamPurple/tree/main/Tools/tID%20Guard)
 2. Extract the project if you downloaded it as a ZIP file.
 3. Open your Chromium-based browser and navigate to:
 
@@ -142,7 +148,7 @@ brave://extensions/
 
 4. Enable **Developer mode**.
 5. Select **Load unpacked**.
-6. Browse to the extracted **tID Guard** folder and select it.
+6. Browse to the extracted `Tools/tID Guard` folder.
 7. Pin the extension to your browser toolbar.
 8. Open the extension popup and configure your "home" Tenant ID.
 
@@ -152,6 +158,9 @@ Once configured, the extension immediately starts monitoring the active Microsof
 
 ## Source Code
 
-tID Guard is open source and available on GitHub.
+tID Guard is part of my **TeamPurple** open-source repository.
 
-Feel free to use it, modify it, or contribute improvements.
+Repository:
+https://github.com/Koosjuh/TeamPurple/tree/main/Tools/tID%20Guard
+
+Bug reports, feature requests and pull requests are always welcome.
