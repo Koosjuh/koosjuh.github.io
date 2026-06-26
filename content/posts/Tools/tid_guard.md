@@ -1,27 +1,25 @@
 ---
-
 title: "tID Guard: Lightweight Tenant ID Guarding for Microsoft Entra Admins"
 date: 2026-06-26
 hero: "/images/posts/tid-guard.png"
-description: "A lightweight Chrome extension that helps Microsoft Entra administrators instantly identify the tenant they're working in."
-summary: "Stop second-guessing which Microsoft Entra tenant you're working in. tID Guard provides a simple visual indicator so you always know where you are before making changes."
+description: "A lightweight Chrome extension that helps Microsoft Entra administrators identify the tenant they are working in."
+summary: "tID Guard helps Microsoft Entra administrators verify the active tenant, convert supported links, and avoid working in the wrong environment."
 categories:
-
-* "Tools"
-* "Microsoft Entra"
-  tags:
-* "Microsoft Entra"
-* "Chrome Extension"
-* "Security"
-  draft: true
-  toc: true
-  menu:
+  - "Tools"
+  - "Microsoft Entra"
+tags:
+  - "Microsoft Entra"
+  - "Chrome Extension"
+  - "Tenant ID"
+draft: true
+toc: true
+menu:
   sidebar:
-  name: "tID Guard"
-  identifier: "tools-tid-guard"
-  parent: "tools"
-  weight: 10
-
+    name: "tID Guard"
+    identifier: "tools-tid-guard"
+    parent: "tools"
+    weight: 10
+---
 ---
 
 # tID Guard
