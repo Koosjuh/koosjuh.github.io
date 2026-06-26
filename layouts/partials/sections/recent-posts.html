@@ -13,7 +13,7 @@
   {{ with $section.name }}{{ $sectionName = . }}{{ end }}
 {{ end }}
 
-<section class="container-fluid section-holder d-flex bg-white" id="{{ $sectionID }}">
+<section class="container-fluid section-holder d-flex" id="{{ $sectionID }}">
   <div class="container anchor p-lg-5 recent-posts-section">
     {{ if not $hideTitle }}
       <h1 class="text-center">{{ $sectionName }}</h1>
