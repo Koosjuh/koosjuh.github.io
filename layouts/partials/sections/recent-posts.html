@@ -1,0 +1,39 @@
+{{/*
+  Local override for Toha recent-posts section.
+  Purpose: respect data/<lang>/sections/recent-posts.yaml numShow instead of the theme default.
+*/}}
+
+{{ $section := .section }}
+{{ $numShow := .numShow | default 9 }}
+{{ $hideTitle := .hideTitle | default false }}
+{{ $sectionID := "recent-posts" }}
+{{ $sectionName := "Recent Posts" }}
+{{ if $section }}
+  {{ with $section.id }}{{ $sectionID = . }}{{ end }}
+  {{ with $section.name }}{{ $sectionName = . }}{{ end }}
+{{ end }}
+
+<section class="container-fluid section-holder d-flex bg-white" id="{{ $sectionID }}">
+  <div class="container anchor p-lg-5 recent-posts-section">
+    {{ if not $hideTitle }}
+      <h1 class="text-center">{{ $sectionName }}</h1>
+    {{ end }}
+
+    <div class="container-fluid post-card-holder" id="recent-post-card-holder">
+      {{ $posts := where site.RegularPages "Type" "posts" }}
+      {{ $posts = where $posts "Layout" "!=" "search" }}
+      {{ $posts = where $posts "Params.hidden" "!=" true }}
+      {{ $posts = sort $posts "Date" "desc" }}
+
+      {{ range first $numShow $posts }}
+        {{ partial "cards/post.html" . }}
+      {{ end }}
+    </div>
+
+    {{ if .showMoreButton }}
+      <div class="text-center pt-3">
+        <a href="{{ "posts" | relLangURL }}" class="btn btn-outline-info">{{ i18n "more" | default "More" }}</a>
+      </div>
+    {{ end }}
+  </div>
+</section>
