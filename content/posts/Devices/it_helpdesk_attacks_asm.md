@@ -227,7 +227,7 @@ This protects access to TeamViewer accounts and the management environment. Micr
 
 If TeamViewer Tensor Conditional Access is available, configure separate rules controlling which support identities are allowed to connect to managed devices.
 
-A recommended model is:
+A possible model is:
 
 ```mermaid
 flowchart LR
@@ -251,11 +251,11 @@ flowchart LR
 
 TeamViewer Conditional Access uses a deny-by-default model once rule verification is enabled. Rules can be created between approved users or user groups and managed device groups. Session permissions can also be restricted, for example by denying file transfer, switching sides, or other functionality that is not required by the Helpdesk.
 
-This creates two separate security boundaries: Microsoft Entra Conditional Access protects **who can authenticate to TeamViewer**, while TeamViewer Conditional Access controls **who can establish a remote connection to a corporate endpoint**.
+This creates two separate security boundaries: Microsoft Entra Conditional Access protects **who can authenticate to TeamViewer**, while TeamViewer Conditional Access controls **who can establish a remote connection to a corporate endpoint via TeamViewer**.
 
 **Disclaimer**
 
-I do not recommend this configuration, TeamViewer and other RMM software vendors allow for Allow and blocklists as well. The main point of this blog is to make you aware of the possibilities to stream line this process and Security Controls that are available. 
+I do not specifically recommend TeamViewer or this exact configuration. TeamViewer and other Remote Management Tool vendors provide similar security controls, such as allowlists, blocklists, SSO, and access restrictions. The purpose of this blog is to demonstrate how remote support can be standardized into a single, recognizable Helpdesk process and to highlight the security controls that can be used to reduce the risk of social engineering and unauthorized remote access.
 
 #### Other Security Options
 
