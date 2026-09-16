@@ -155,24 +155,110 @@ Document:
 * How an employee can verify that the person contacting them is actually IT
 * What IT will never ask an employee to do
 
-### Example: Team Viewer Native Integration
+### Example: TeamViewer Integration, Setup, Security Controls, Security Awareness 
 
-Enable Teamviewer in your Intune Environment.
+#### Enable TeamViewer Integration
 
-Deploy Teamviewer Client
-Configure the Teamviewer package, if it is nost installed on the host, the user will be prompted to download the version from the Microsoft Store however we the goal is to get a streamlined process therefore the client should already be on the device.
+First, enable the TeamViewer integration within your Microsoft Intune environment.
 
-Configure SSO for Teamviewer
+Go to the [Microsoft Intune admin center](https://intune.microsoft.com).
 
-Configure Helpdesk Roles for Teamviewer
+Navigate to **Tenant administration** and select **Connectors and tokens**.
 
-Configure Conditional Access for Teamviewer
+![Intune Tenant Administration](/images/posts/helpdesk/Intune_TenantAdministration_ConnectandTokens.png)
 
-Other Security Options
+Select **TeamViewer connector**.
+
+![TeamViewer Connector](/images/posts/helpdesk/Intune_ConnectandTokens_TeamViewerConnector.png)
+
+Enable the **TeamViewer Connector** and complete the required authorization process to connect your TeamViewer environment with Microsoft Intune.
+
+For the complete configuration and additional setup options, refer to the official TeamViewer documentation:
+
+[TeamViewer Intune Integration Installation and User Guide](https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-tensor-classic/integrations/intune-integration-installation-and-user-guide/)
+
+#### Deploy TeamViewer Client
+
+The TeamViewer client should be deployed as a mandatory application through Microsoft Intune.
+
+Users should not be required to download or install remote management software themselves. This supports a consistent Helpdesk process and allows users to be explicitly instructed never to install Remote Management Tools when requested during a support interaction.
+
+Because the approved client is already installed, any request to download additional remote access software should be treated as suspicious.
+
+#### Configure SSO for TeamViewer
+
+Configure Single Sign-On using Microsoft Entra ID for TeamViewer support accounts.
+
+SSO centralizes authentication, removes the need for separate TeamViewer credentials, and allows existing Entra ID security controls such as MFA and Conditional Access to be applied. It also simplifies onboarding and offboarding of Helpdesk personnel.
+
+This supports the goal of a single, recognizable remote support procedure where both the user and the Helpdesk rely on the same centrally managed process.
+
+For configuration guidance, refer to the official TeamViewer documentation:
+
+[Single Sign-On for Microsoft Entra ID](https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-tensor-classic/sso/single-sign-on-for-microsoft-entra-id/)
+
+#### Configure Helpdesk Roles for TeamViewer
+
+Within Microsoft Intune, assign Helpdesk personnel only the permissions required to initiate remote assistance sessions. The built-in **Help Desk Operator** role is intended for remote support activities and should be preferred over broader administrative roles. Microsoft recommends using Intune RBAC and least-privilege permissions instead of assigning elevated Microsoft Entra roles for daily support activities.
+
+For the TeamViewer integration specifically, Helpdesk personnel require permission to read the remote assistance connector and initiate remote assistance sessions.
+
+![TeamViewer Integration Roles and Permissions](/images/posts/helpdesk/TeamViewerIntegration_Roles_Permissions.png)
+
+This keeps the approved remote-support process available to Helpdesk personnel without granting unnecessary Intune or Entra administrative privileges.
+
+> **Security Disclaimer:** When providing remote support, any credentials or authentication tokens used during the session may be processed or stored on the remote user's device and could potentially be exposed if that device is compromised. Helpdesk personnel should therefore never use highly privileged accounts such as Global Administrator, Security Administrator, or Domain Administrator on standard user endpoints unless explicitly required and appropriately controlled. Administrative accounts should be separated by privilege tier and used according to the principles of least privilege and privileged access separation. Where local elevation is required, prefer device-specific or scoped administrative credentials rather than broad privileged identities.
+
+#### Configure Conditional Access for TeamViewer
+
+Conditional Access should be applied at two different stages of the remote support process.
+
+**1. Protect TeamViewer Console authentication**
+
+When TeamViewer is integrated with Microsoft Entra ID using SSO, configure an **Entra Conditional Access policy** for the TeamViewer Enterprise Application. For Helpdesk and TeamViewer administrators, require at minimum:
+
+* Phishing-resistant MFA
+* A compliant or otherwise trusted administrative device
+* Access only for the required Helpdesk and administrative groups
+
+This protects access to TeamViewer accounts and the management environment. Microsoft recommends phishing-resistant MFA for privileged identities and supports requiring compliant devices through Conditional Access.
+
+**2. Protect remote connections to endpoints**
+
+If TeamViewer Tensor Conditional Access is available, configure separate rules controlling which support identities are allowed to connect to managed devices.
+
+A recommended model is:
+
+```text
+TeamViewer-Support
+        |
+        | Allow
+        v
+Corporate Endpoints
+
+All other identities
+        |
+        | Deny
+        v
+Corporate Endpoints
+```
+
+TeamViewer Conditional Access uses a deny-by-default model once rule verification is enabled. Rules can be created between approved users or user groups and managed device groups. Session permissions can also be restricted, for example by denying file transfer, switching sides, or other functionality that is not required by the Helpdesk.
+
+This creates two separate security boundaries: Microsoft Entra Conditional Access protects **who can authenticate to TeamViewer**, while TeamViewer Conditional Access controls **who can establish a remote connection to a corporate endpoint**.
+
+**Disclaimer**
+
+I do not recommend this configuration, TeamViewer and other RMM software vendors allow for Allow and blocklists as well. The main point of this blog is to make you aware of the possibilities to stream line this process and Security Controls that are available. 
+
+#### Other Security Options
 
 Please review https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-remote/security/security-statement/ to see all the security options Team Viewer has to offer. 
 
-Disclaimer
+- Bring your own Certificate
+- Block & Allow Lists
+
+#### Disclaimer
 
 I do not specifically recommend TeamViewer; however, due to its native integrations, it provides a good example of how a Remote Management Tool can be selected, centrally configured, and streamlined into a single, understandable support process. This makes it easier to train employees to recognize and follow only the approved Helpdesk process, reducing the likelihood of successful social engineering and improving overall security awareness.
 
