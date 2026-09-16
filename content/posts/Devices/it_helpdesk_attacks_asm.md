@@ -112,78 +112,252 @@ Discuss:
 
 ## RMM Deployment Through Microsoft Intune
 
-### What Is Intune Deploying?
+### Identify Centrally Deployed Remote Support Software
 
-Use Microsoft Graph / Intune reporting to determine whether known RMM software is centrally deployed.
+After discovering Remote Management Tools through Microsoft Defender, determine which remote support applications are intentionally deployed and managed by the organization.
+
+Microsoft Intune and Microsoft Graph can be used to identify applications that are centrally deployed to managed devices.
 
 ```text
 Microsoft Graph endpoints and examples to be added.
 ```
 
-Compare this with the Defender findings.
+Compare the applications deployed through Intune with the RMM software identified through Microsoft Defender.
 
-The goal is to answer:
+The objective is to answer a simple question:
 
-**Is this remote access software present because IT deliberately deployed it?**
+**Is this Remote Management Tool present because IT deliberately deployed and manages it?**
+
+Software detected on endpoints but not part of the approved deployment process should be investigated. This may include legacy support tools, user-installed applications, portable RMM software, or applications introduced outside the normal IT process.
+
+---
 
 ## Standardizing Remote Support
 
-### Selecting the Approved RMM Platform
+Remote support should follow a single, documented, and recognizable process.
 
-Discuss the process for selecting the organization's approved remote support solution.
+The exact technology used is less important than making sure the organization controls **how the software is deployed, who can use it, how authentication is performed, which devices can be accessed, and how users recognize legitimate support activity**.
 
-Topics:
+### 1. Select the Approved Remote Support Platform
 
-* Authentication
-* MFA
-* RBAC
-* Logging
-* Session auditing
-* Device deployment
-* Administrative access
+Organizations should define which Remote Management Tool or tools are officially approved for remote support.
 
-### Deploying the Approved Platform
+When selecting a platform, consider at least:
 
-Discuss deploying the approved tooling centrally through Intune or another managed deployment mechanism.
+* Integration with Microsoft Entra ID or another central identity provider
+* Single Sign-On
+* MFA and Conditional Access support
+* Role-Based Access Control
+* Device or endpoint access restrictions
+* Support for allowlists and blocklists
+* Session logging
+* Session auditing or recording where required
+* File-transfer controls
+* Administrative elevation controls
+* Centralized deployment
+* API or reporting capabilities
+* Integration with existing endpoint-management tooling
 
-### Removing Unnecessary RMM Tools
+The objective is to prevent the Helpdesk environment from becoming a collection of different remote support applications with different authentication methods and security controls.
 
-Reduce the number of remote support products that users could reasonably believe belong to IT.
+### 2. Centrally Deploy the Approved Client
+
+Where a local client or agent is required, it should be deployed centrally through Microsoft Intune or another approved software-management platform.
+
+Users should not normally be required to search for, download, or install remote support software themselves.
+
+This provides an important security-awareness benefit:
+
+> **The approved remote support application is already installed. IT will not ask you to download another remote access tool.**
+
+If an attacker asks an employee to download AnyDesk, TeamViewer, ScreenConnect, Splashtop, or another Remote Management Tool outside the documented process, the request becomes easier for the employee to recognize as abnormal.
+
+### 3. Centralize Helpdesk Authentication
+
+Helpdesk personnel should authenticate through the organization's central identity platform whenever the selected RMM vendor supports it.
+
+Prefer:
+
+* Microsoft Entra ID Single Sign-On
+* Phishing-resistant MFA
+* Conditional Access
+* Managed or compliant administrative devices
+* Dedicated Helpdesk or administrative identities
+
+Avoid creating separate unmanaged RMM accounts where possible.
+
+Centralized authentication also allows access to be removed automatically when Helpdesk personnel leave the organization or change roles.
+
+### 4. Apply Least-Privilege Access
+
+Helpdesk personnel should receive only the permissions required to perform their support activities.
+
+Remote support operators generally do not require highly privileged identities such as:
+
+* Global Administrator
+* Security Administrator
+* Domain Administrator
+
+Use the RMM platform's own RBAC capabilities together with Microsoft Intune RBAC and Microsoft Entra ID controls where applicable.
+
+Where administrative elevation is required on an endpoint, prefer mechanisms that provide scoped or device-specific elevation rather than using highly privileged identities directly on user devices.
+
+Examples include:
+
+* Windows LAPS
+* Microsoft Intune Endpoint Privilege Management
+* Dedicated local administrative credentials
+* Other controlled Just-In-Time elevation mechanisms
+
+### 5. Restrict Which Devices Can Be Accessed
+
+The approved remote support platform should not automatically provide unrestricted access to every corporate endpoint.
+
+Where supported, configure policies defining:
+
+* Which Helpdesk groups may initiate remote sessions
+* Which endpoint groups they may access
+* Which administrators may manage the RMM platform
+* Whether external accounts may establish sessions
+* Which session capabilities are allowed
+
+A default-deny or explicit-allow model is preferable where the platform supports it.
+
+For example, file transfer, clipboard access, unattended access, remote command execution, or switching control between users may not be required for every Helpdesk role.
+
+### 6. Protect the Administrative Interface
+
+Access to the RMM management portal should be treated as administrative access.
+
+Where technically possible, require:
+
+* Phishing-resistant MFA
+* Microsoft Entra Conditional Access
+* Managed or compliant administrative devices
+* Access only from approved Helpdesk or administrative groups
+* Restricted geographic or network access where appropriate
+
+The objective is to protect both the identity used by the Helpdesk and the management interface capable of initiating remote connections.
+
+### 7. Enable Logging and Session Auditing
+
+Remote support activity should be logged centrally.
+
+At minimum, organizations should be able to determine:
+
+* Who initiated the session
+* Which device was accessed
+* When the session started
+* When the session ended
+* Which Helpdesk identity performed the session
+* Whether administrative elevation occurred
+* Whether file transfer or other sensitive functionality was used
+
+Where supported and appropriate for the organization, session recording can provide additional auditing capabilities.
+
+These logs should be retained according to the organization's security and compliance requirements and, where possible, integrated with the SIEM or monitoring platform.
+
+### 8. Remove Unnecessary Remote Management Tools
+
+Once the approved remote support process has been established, remove Remote Management Tools that are no longer required.
+
+Multiple remote support products increase ambiguity.
+
+If users regularly see several different remote-access applications, it becomes much harder to teach them which requests are legitimate.
+
+The preferred situation is:
+
+> **This is the tool IT uses. This is how IT contacts you. This is how a support session starts. Anything outside this process should be treated as suspicious.**
+
+Defender inventory and Advanced Hunting can then be used periodically to identify RMM software that falls outside the approved list.
+
+---
 
 ## Microsoft Teams External Communication
 
-### External Chat as an Attack Surface
+### External Communication as an Attack Surface
 
-Discuss how attackers can use Teams external communication to contact users while pretending to represent IT or another trusted organization.
+Remote support does not start with the RMM application itself.
 
-### Reviewing Teams External Access
+Attackers first need a communication channel through which they can establish trust with the victim.
 
-Review the relevant Teams external communication settings.
+Microsoft Teams external communication can provide such a channel. An external user may contact an employee and impersonate Helpdesk personnel, another department, a supplier, or a Microsoft support representative.
+
+Organizations should therefore review whether their current Teams external communication configuration matches their actual business requirements.
+
+### Review Teams External Access
+
+Review the tenant's Teams external communication settings and determine:
+
+* Whether users need to communicate with arbitrary external Teams tenants
+* Whether communication can be limited to approved domains
+* Whether specific user populations require external communication
+* Whether Helpdesk personnel ever legitimately initiate support through external Teams conversations
+* Whether communication with unmanaged Teams accounts is required
 
 ```text
-Teams configuration and Graph endpoints to be added.
+Teams configuration and Microsoft Graph endpoints to be added.
 ```
 
-### Defining What Is Actually Required
+The objective is not necessarily to disable external Teams communication completely, but to reduce unnecessary communication paths where business requirements allow it.
 
-Determine whether unrestricted external communication is required or whether the configuration can be reduced based on business requirements.
+### Define the Expected Support Communication Channel
+
+Employees should know how legitimate IT personnel contact them.
+
+For example, an organization may establish that:
+
+* Helpdesk requests always originate from the internal ticketing system.
+* Helpdesk personnel only contact users using internal Teams accounts.
+* External Teams users never provide internal IT support.
+* Remote sessions are only initiated after an existing support ticket has been created.
+
+This makes the communication channel itself part of the security control.
+
+---
 
 ## Establishing a Clear IT Support Process
 
-Technical controls should support a clearly defined internal process.
+The technical controls described above should support a documented internal process.
 
-Document:
+Organizations should clearly define:
 
+* How employees request IT support
 * How IT contacts employees
-* Which remote support platform IT uses
-* How a support session is initiated
+* Which remote support platform is used
+* How a remote session is initiated
 * Whether users are ever expected to install software
-* How an employee can verify that the person contacting them is actually IT
-* What IT will never ask an employee to do
+* How employees can verify the identity of the Helpdesk employee
+* How administrative elevation is performed
+* What actions Helpdesk personnel may request
+* What Helpdesk personnel will never request
 
-### Example: TeamViewer Integration, Setup, Security Controls, Security Awareness
+A possible process could look like this:
 
-#### Enable TeamViewer Integration
+```mermaid
+flowchart LR
+    A[User creates support request] --> B[Helpdesk ticket created]
+    B --> C[Helpdesk contacts user through approved channel]
+    C --> D[Existing approved RMM client is used]
+    D --> E[User verifies support request]
+    E --> F[Remote session established]
+    F --> G[Session activity logged]
+    G --> H[Session closed and ticket updated]
+```
+
+The objective is to remove ambiguity.
+
+An attacker should not be able to introduce a completely different support process and still appear legitimate.
+
+---
+
+# Hands-On Example: TeamViewer with Microsoft Intune
+
+The following section demonstrates how these principles can be implemented using TeamViewer and Microsoft Intune.
+
+TeamViewer is used as an example because it integrates with Microsoft Intune and Microsoft Entra ID and provides several controls that demonstrate the concepts described above. Other Remote Management Tool vendors provide comparable capabilities.
+
+## Enable the TeamViewer Integration
 
 First, enable the TeamViewer integration within your Microsoft Intune environment.
 
@@ -203,61 +377,65 @@ For the complete configuration and additional setup options, refer to the offici
 
 [TeamViewer Intune Integration Installation and User Guide](https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-tensor-classic/integrations/intune-integration-installation-and-user-guide/)
 
-#### Deploy TeamViewer Client
+## Deploy the TeamViewer Client
 
-The TeamViewer client should be deployed as a mandatory application through Microsoft Intune.
+Deploy the TeamViewer client as a mandatory application through Microsoft Intune.
 
-Users should not be required to download or install remote management software themselves. This supports a consistent Helpdesk process and allows users to be explicitly instructed never to install Remote Management Tools when requested during a support interaction.
+This implements one of the primary controls described earlier: users should not normally need to download remote support software themselves.
 
-Because the approved client is already installed, any request to download additional remote access software should be treated as suspicious.
+Because the approved client is already installed, employees can be instructed that requests to download additional remote access software fall outside the normal Helpdesk process.
 
-#### Configure SSO for TeamViewer
+## Configure TeamViewer SSO
 
 Configure Single Sign-On using Microsoft Entra ID for TeamViewer support accounts.
 
-SSO centralizes authentication, removes the need for separate TeamViewer credentials, and allows existing Entra ID security controls such as MFA and Conditional Access to be applied. It also simplifies onboarding and offboarding of Helpdesk personnel.
+SSO centralizes authentication and allows Microsoft Entra security controls such as MFA and Conditional Access to protect TeamViewer access.
 
-This supports the goal of a single, recognizable remote support procedure where both the user and the Helpdesk rely on the same centrally managed process.
+It also simplifies onboarding and offboarding because access can be controlled through Entra identities and groups.
 
-For configuration guidance, refer to the official TeamViewer documentation:
+For configuration guidance:
 
 [Single Sign-On for Microsoft Entra ID](https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-tensor-classic/sso/single-sign-on-for-microsoft-entra-id/)
 
-#### Configure Helpdesk Roles for TeamViewer
+## Configure Helpdesk Permissions
 
-Within Microsoft Intune, assign Helpdesk personnel only the permissions required to initiate remote assistance sessions. The built-in **Help Desk Operator** role is intended for remote support activities and should be preferred over broader administrative roles. Microsoft recommends using Intune RBAC and least-privilege permissions instead of assigning elevated Microsoft Entra roles for daily support activities.
+Within Microsoft Intune, assign Helpdesk personnel only the permissions required to initiate remote assistance sessions.
+
+The built-in **Help Desk Operator** role can be used as a starting point instead of assigning broad Microsoft Entra administrative roles.
 
 For the TeamViewer integration specifically, Helpdesk personnel require permission to read the remote assistance connector and initiate remote assistance sessions.
 
 ![TeamViewer Integration Roles and Permissions](/static/images/posts/helpdesk/TeamViewerIntegration_Roles_Permissions.png)
 
-This keeps the approved remote-support process available to Helpdesk personnel without granting unnecessary Intune or Entra administrative privileges.
+This allows Helpdesk personnel to use the approved remote-support process without unnecessarily expanding their administrative privileges.
 
-See this example of a connection to a device via Intune.
+An example of connecting to a device through Microsoft Intune is shown below.
 
 ![Connection to Device](/static/images/posts/helpdesk/microsoft-intune-overview_connect_toDevice.avif)
 
-> **Security Disclaimer:** When providing remote support, any credentials or authentication tokens used during the session may be processed or stored on the remote user's device and could potentially be exposed if that device is compromised. Helpdesk personnel should therefore never use highly privileged accounts such as Global Administrator, Security Administrator, or Domain Administrator on standard user endpoints unless explicitly required and appropriately controlled. Administrative accounts should be separated by privilege tier and used according to the principles of least privilege and privileged access separation. Where local elevation is required, prefer device-specific or scoped administrative credentials rather than broad privileged identities.
+> **Security Disclaimer:** When providing remote support, any credentials or authentication tokens entered or used on the remote endpoint may potentially be exposed if that endpoint is compromised. Highly privileged identities such as Global Administrator, Security Administrator, or Domain Administrator should therefore not normally be used directly on standard user endpoints. Where administrative elevation is required, prefer scoped or device-specific elevation mechanisms.
 
-#### Configure Conditional Access for TeamViewer
+## Configure Conditional Access
 
-Conditional Access should be applied at two different stages of the remote support process.
+Conditional Access can protect two different parts of the remote support process.
 
-**1. Protect TeamViewer Console authentication**
+### Protect TeamViewer Authentication
 
-When TeamViewer is integrated with Microsoft Entra ID using SSO, configure an **Entra Conditional Access policy** for the TeamViewer Enterprise Application. For Helpdesk and TeamViewer administrators, require at minimum:
+When TeamViewer is integrated with Microsoft Entra ID using SSO, configure an Entra Conditional Access policy for the TeamViewer Enterprise Application.
+
+For Helpdesk and TeamViewer administrators, consider requiring:
 
 * Phishing-resistant MFA
 * A compliant or otherwise trusted administrative device
-* Access only for the required Helpdesk and administrative groups
+* Membership of the required Helpdesk or administrative group
 
-This protects access to TeamViewer accounts and the management environment. Microsoft recommends phishing-resistant MFA for privileged identities and supports requiring compliant devices through Conditional Access.
+This protects access to the TeamViewer account and management environment.
 
-**2. Protect remote connections to endpoints**
+### Protect Remote Connections
 
-If TeamViewer Tensor Conditional Access is available, configure separate rules controlling which support identities are allowed to connect to managed devices.
+TeamViewer Tensor Conditional Access can provide an additional authorization layer controlling which support identities are allowed to connect to which managed endpoints.
 
-A possible model is:
+For example:
 
 ```mermaid
 flowchart LR
@@ -271,32 +449,47 @@ flowchart LR
     D --> E[TeamViewer SSO]
 
     subgraph TVCA[TeamViewer Conditional Access]
-        E --> F[TeamViewer Support Group]
-        F --> G[Allowed Device Groups]
+        E --> F[Approved Helpdesk Group]
+        F --> G[Approved Device Groups]
         H[Other Users / External Accounts] --> I[Deny]
     end
 
     G --> J[Corporate Endpoints]
 ```
 
-TeamViewer Conditional Access uses a deny-by-default model once rule verification is enabled. Rules can be created between approved users or user groups and managed device groups. Session permissions can also be restricted, for example by denying file transfer, switching sides, or other functionality that is not required by the Helpdesk.
+This creates two security boundaries:
 
-This creates two separate security boundaries: Microsoft Entra Conditional Access protects **who can authenticate to TeamViewer**, while TeamViewer Conditional Access controls **who can establish a remote connection to a corporate endpoint via TeamViewer**.
+**Microsoft Entra Conditional Access** determines who can authenticate to TeamViewer.
 
-**Disclaimer**
+**TeamViewer Conditional Access** determines who can establish remote connections to corporate endpoints.
 
-I do not specifically recommend TeamViewer or this exact configuration. TeamViewer and other Remote Management Tool vendors provide similar security controls, such as allowlists, blocklists, SSO, and access restrictions. The purpose of this blog is to demonstrate how remote support can be standardized into a single, recognizable Helpdesk process and to highlight the security controls that can be used to reduce the risk of social engineering and unauthorized remote access.
+Where supported, additional session functionality such as file transfer or other remote-control capabilities can also be restricted according to Helpdesk requirements.
 
-#### Other Security Options
+## Additional TeamViewer Security Controls
 
-Please review https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-remote/security/security-statement/ to see all the security options Team Viewer has to offer.
+TeamViewer provides additional controls that can be evaluated depending on the organization's requirements, including:
 
-* Bring your own Certificate
-* Block & Allow Lists
+* Block and Allow Lists
+* Bring Your Own Certificate
+* Device and user access restrictions
+* Session policies
+* Authentication and identity controls
 
-#### Disclaimer
+The available security controls should be reviewed against the organization's standard remote-support requirements rather than enabled solely because they are available.
 
-I do not specifically recommend TeamViewer; however, due to its native integrations, it provides a good example of how a Remote Management Tool can be selected, centrally configured, and streamlined into a single, understandable support process. This makes it easier to train employees to recognize and follow only the approved Helpdesk process, reducing the likelihood of successful social engineering and improving overall security awareness.
+For additional information:
+
+[TeamViewer Security Statement](https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-remote/security/security-statement/)
+
+### Disclaimer
+
+I do not specifically recommend TeamViewer or this exact configuration.
+
+TeamViewer is used here as a practical example of how the controls described in this article can be implemented. Other Remote Management Tool vendors provide similar capabilities such as SSO, MFA, RBAC, allowlists, access restrictions, session logging, and centralized deployment.
+
+The important objective is not the specific vendor.
+
+The objective is to establish **one controlled, predictable, and recognizable remote support process** that employees can distinguish from an attacker impersonating the Helpdesk.
 
 ## Turning Technical Controls into Security Awareness
 
@@ -318,11 +511,11 @@ The organization can provide much stronger rules:
 
 These statements become possible because the tenant and operational processes have been configured to make them true.
 
-## Bringing It All Together
+## Executive Summary
 
 The objective is to remove as much uncertainty as possible.
 
-Microsoft Defender provides visibility into remote access tooling already present on endpoints.
+Microsoft Defender provides visibility into remote access tooling already present on endpoints. And there should be an easy to use process and single application to enable remote support. All others should be investigated first, why were they there, and then subsequently removed.
 
 Microsoft Intune provides visibility and control over what IT deliberately deploys.
 
