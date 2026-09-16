@@ -193,11 +193,11 @@ Go to the [Microsoft Intune admin center](https://intune.microsoft.com).
 
 Navigate to **Tenant administration** and select **Connectors and tokens**.
 
-![Intune Tenant Administration](/images/posts/helpdesk/Intune_TenantAdministration_ConnectandTokens.png)
+![Intune Tenant Administration](/static/images/posts/helpdesk/Intune_TenantAdministration_ConnectandTokens.png)
 
 Select **TeamViewer connector**.
 
-![TeamViewer Connector](/images/posts/helpdesk/Intune_ConnectandTokens_TeamViewerConnector.png)
+![TeamViewer Connector](/static/images/posts/helpdesk/Intune_ConnectandTokens_TeamViewerConnector.png)
 
 Enable the **TeamViewer Connector** and complete the required authorization process to connect your TeamViewer environment with Microsoft Intune.
 
@@ -231,7 +231,7 @@ Within Microsoft Intune, assign Helpdesk personnel only the permissions required
 
 For the TeamViewer integration specifically, Helpdesk personnel require permission to read the remote assistance connector and initiate remote assistance sessions.
 
-![TeamViewer Integration Roles and Permissions](/images/posts/helpdesk/TeamViewerIntegration_Roles_Permissions.png)
+![TeamViewer Integration Roles and Permissions](/static/images/posts/helpdesk/TeamViewerIntegration_Roles_Permissions.png)
 
 This keeps the approved remote-support process available to Helpdesk personnel without granting unnecessary Intune or Entra administrative privileges.
 
