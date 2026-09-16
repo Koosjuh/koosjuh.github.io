@@ -1,9 +1,9 @@
 ---
-title: "Reducing the Attack Surface Against Fake IT Helpdesk Attacks"
+title: "Stopping Fake IT Support: RMM, Intune, Teams and User Awareness"
 date: 2026-09-15
 hero: "/images/posts/fake-it-helpdesk.png"
 description: "Reducing the attack surface against fake IT helpdesk attacks by controlling remote access tooling, Microsoft Intune deployments, Teams external communication, and internal support processes."
-summary: "A practical approach to reducing the opportunities attackers have to impersonate IT support and convince users to install or use unauthorized remote access tooling."
+summary: "A practical approach to reducing the opportunities attackers have to impersonate IT support and convince users to install or use unauthorized remote access tooling. Governing the entire process from beginning to end."
 categories:
   - "Defender"
   - "Devices"
@@ -32,8 +32,6 @@ menu:
     parent: "Devices"
     weight: 20
 ---
-
-# Reducing the Attack Surface Against Fake IT Helpdesk Attacks
 
 ## Introduction
 
