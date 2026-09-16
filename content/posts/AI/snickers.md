@@ -219,11 +219,21 @@ OpenAI similarly describes prompt injection as a situation where a third party p
 
 The Snickers campaign is intentionally benign, but the delivery mechanism demonstrates the concept extremely well:
 
-1. A trusted-looking piece of content is shared with the AI.
-2. The AI follows a URL.
-3. The retrieved webpage contains instructions aimed at the AI rather than the human.
-4. Those instructions enter the model's context.
-5. The model may allow that external content to influence its subsequent behavior.
+```mermaid
+graph TD
+    A["Trusted-looking content is shared with the AI"]
+    B["AI follows a URL"]
+    C["Webpage is retrieved"]
+    D["Webpage contains instructions aimed at the AI"]
+    E["External instructions enter the model's context"]
+    F["External content may influence the model's subsequent behavior"]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+```
 
 The attacker does not necessarily need to attack the AI platform directly. They can instead place instructions somewhere they expect AI systems to eventually read.
 
