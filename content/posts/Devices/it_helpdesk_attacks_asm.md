@@ -232,6 +232,9 @@ For the TeamViewer integration specifically, Helpdesk personnel require permissi
 
 This keeps the approved remote-support process available to Helpdesk personnel without granting unnecessary Intune or Entra administrative privileges.
 
+See this example of a connection to a device via Intune.
+![Connection](/images/posts/helpdesk/microsoft-intune-overview_connect_toDevice.avif)
+
 > **Security Disclaimer:** When providing remote support, any credentials or authentication tokens used during the session may be processed or stored on the remote user's device and could potentially be exposed if that device is compromised. Helpdesk personnel should therefore never use highly privileged accounts such as Global Administrator, Security Administrator, or Domain Administrator on standard user endpoints unless explicitly required and appropriately controlled. Administrative accounts should be separated by privilege tier and used according to the principles of least privilege and privileged access separation. Where local elevation is required, prefer device-specific or scoped administrative credentials rather than broad privileged identities.
 
 #### Configure Conditional Access for TeamViewer
