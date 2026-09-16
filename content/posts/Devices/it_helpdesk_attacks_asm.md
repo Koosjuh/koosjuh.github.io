@@ -193,11 +193,11 @@ Go to the [Microsoft Intune admin center](https://intune.microsoft.com).
 
 Navigate to **Tenant administration** and select **Connectors and tokens**.
 
-{{< rimg src="images/posts/helpdesk/Intune_TenantAdministration_ConnectandTokens.png" alt="Intune Tenant Administration" >}}
+![Intune Tenant Administration](/images/posts/helpdesk/Intune_TenantAdministration_ConnectandTokens.png)
 
 Select **TeamViewer connector**.
 
-{{< rimg src="images/posts/helpdesk/Intune_ConnectandTokens_TeamViewerConnector.png" alt="TeamViewer Connector" >}}
+![TeamViewer Connector](/images/posts/helpdesk/Intune_ConnectandTokens_TeamViewerConnector.png)
 
 Enable the **TeamViewer Connector** and complete the required authorization process to connect your TeamViewer environment with Microsoft Intune.
 
@@ -231,13 +231,13 @@ Within Microsoft Intune, assign Helpdesk personnel only the permissions required
 
 For the TeamViewer integration specifically, Helpdesk personnel require permission to read the remote assistance connector and initiate remote assistance sessions.
 
-{{< rimg src="images/posts/helpdesk/TeamViewerIntegration_Roles_Permissions.png" alt="TeamViewer Integration Roles and Permissions" >}}
+![TeamViewer Integration Roles and Permissions](/images/posts/helpdesk/TeamViewerIntegration_Roles_Permissions.png)
 
 This keeps the approved remote-support process available to Helpdesk personnel without granting unnecessary Intune or Entra administrative privileges.
 
 See this example of a connection to a device via Intune.
 
-{{< rimg src="images/posts/helpdesk/microsoft-intune-overview_connect_toDevice.avif" alt="Connection to Device" >}}
+![Connection to Device](/images/posts/helpdesk/microsoft-intune-overview_connect_toDevice.avif)
 
 > **Security Disclaimer:** When providing remote support, any credentials or authentication tokens used during the session may be processed or stored on the remote user's device and could potentially be exposed if that device is compromised. Helpdesk personnel should therefore never use highly privileged accounts such as Global Administrator, Security Administrator, or Domain Administrator on standard user endpoints unless explicitly required and appropriately controlled. Administrative accounts should be separated by privilege tier and used according to the principles of least privilege and privileged access separation. Where local elevation is required, prefer device-specific or scoped administrative credentials rather than broad privileged identities.
 
