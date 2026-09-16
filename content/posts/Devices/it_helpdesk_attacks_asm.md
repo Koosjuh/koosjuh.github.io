@@ -51,7 +51,7 @@ The goal is to create one predictable and recognizable Helpdesk process. Employe
 
 A typical Fake IT Helpdesk attack starts with an attacker contacting a user while impersonating IT support. The attacker creates urgency, convinces the user to start or install a Remote Management Tool, and then obtains interactive access to the device. The user on the other side generally does not have the technical know how and can fall for this sort of social engineering.
 
-```mermaid
+{{< mermaid >}}
 flowchart LR
     A[Attacker impersonates IT / Helpdesk either via Phone or Teams] --> B[Creates urgency or claims a technical issue]
     B --> C[User is instructed to start or install an RMM tool]
@@ -59,7 +59,7 @@ flowchart LR
     D --> E[Credential or session theft]
     D --> F[Malware / Persistence]
     D --> G[Reconnaissance / Lateral Movement]
-```
+{{< /mermaid >}}
 
 Legitimate RMM software is attractive to attackers because it already provides many capabilities required for hands-on-keyboard access, while its executables and network traffic may be considered legitimate within an enterprise environment.
 
@@ -334,7 +334,7 @@ Organizations should clearly define:
 
 A possible process could look like this:
 
-```mermaid
+{{< mermaid >}}
 flowchart LR
     A[User creates support request] --> B[Helpdesk ticket created]
     B --> C[Helpdesk contacts user through approved channel]
@@ -343,7 +343,7 @@ flowchart LR
     E --> F[Remote session established]
     F --> G[Session activity logged]
     G --> H[Session closed and ticket updated]
-```
+{{< /mermaid >}}
 
 The objective is to remove ambiguity.
 
@@ -437,7 +437,7 @@ TeamViewer Tensor Conditional Access can provide an additional authorization lay
 
 For example:
 
-```mermaid
+{{< mermaid >}}
 flowchart LR
     A[Helpdesk Engineer] --> B[Microsoft Entra ID]
 
@@ -455,7 +455,7 @@ flowchart LR
     end
 
     G --> J[Corporate Endpoints]
-```
+{{< /mermaid >}}
 
 This creates two security boundaries:
 

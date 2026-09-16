@@ -221,7 +221,7 @@ OpenAI similarly describes prompt injection as a situation where a third party p
 
 The Snickers campaign is intentionally benign, but the delivery mechanism demonstrates the concept extremely well:
 
-```mermaid
+{{< mermaid >}}
 graph TD
     A["Trusted-looking content is shared with the AI"]
     B["AI is instructed to follow or retrieve a URL"]
@@ -243,7 +243,7 @@ graph TD
     D --> G
     G --> H
     H --> I
-```
+{{< /mermaid >}}
 
 The attacker does not necessarily need to attack the AI platform directly. They can instead place instructions somewhere they expect AI systems to eventually read.
 
