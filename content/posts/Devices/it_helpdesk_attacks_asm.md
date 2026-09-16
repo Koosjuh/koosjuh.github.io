@@ -229,18 +229,24 @@ If TeamViewer Tensor Conditional Access is available, configure separate rules c
 
 A recommended model is:
 
-```text
-TeamViewer-Support
-        |
-        | Allow
-        v
-Corporate Endpoints
+```mermaid
+flowchart LR
+    A[Helpdesk Engineer] --> B[Microsoft Entra ID]
 
-All other identities
-        |
-        | Deny
-        v
-Corporate Endpoints
+    subgraph ENTRA[Microsoft Entra Conditional Access]
+        B --> C[Phishing-resistant MFA]
+        C --> D[Compliant or trusted device]
+    end
+
+    D --> E[TeamViewer SSO]
+
+    subgraph TVCA[TeamViewer Conditional Access]
+        E --> F[TeamViewer Support Group]
+        F --> G[Allowed Device Groups]
+        H[Other Users / External Accounts] --> I[Deny]
+    end
+
+    G --> J[Corporate Endpoints]
 ```
 
 TeamViewer Conditional Access uses a deny-by-default model once rule verification is enabled. Rules can be created between approved users or user groups and managed device groups. Session permissions can also be restricted, for example by denying file transfer, switching sides, or other functionality that is not required by the Helpdesk.
