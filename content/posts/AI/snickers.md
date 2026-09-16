@@ -1,6 +1,6 @@
 ---
 title: "Snickers Hungr.AI: When Marketing Becomes a Prompt Injection Demo"
-date: 2026-03-10T06:00:23+06:00
+date: 2026-09-16
 hero: "/images/posts/snickers.png"
 description: "Prompt injection lesson by snickers. hungr.ai"
 summary: "Snickers Hungr.AI when Marketing Becomes a Prompt Injection Demo"
@@ -11,7 +11,7 @@ tags:
   - "Prompt Injection"
   - "AI"
   - "Snickers"
-draft: true
+draft: false
 toc: true
 menu:
   sidebar:
@@ -281,7 +281,7 @@ Sometimes they come wrapped in chocolate and peanuts. And I guess mission succee
 
 Also as a last test I used Incognito mode, did not log in to chatgpt and see how it would respond:
 
-# ChatGPT Incognito Conversation Test
+## ChatGPT Incognito Conversation Test
 
 | 👤 **You** | 🤖 **ChatGPT** |
 |---|---|
