@@ -155,6 +155,27 @@ Document:
 * How an employee can verify that the person contacting them is actually IT
 * What IT will never ask an employee to do
 
+### Example: Team Viewer Native Integration
+
+Enable Teamviewer in your Intune Environment.
+
+Deploy Teamviewer Client
+Configure the Teamviewer package, if it is nost installed on the host, the user will be prompted to download the version from the Microsoft Store however we the goal is to get a streamlined process therefore the client should already be on the device.
+
+Configure SSO for Teamviewer
+
+Configure Helpdesk Roles for Teamviewer
+
+Configure Conditional Access for Teamviewer
+
+Other Security Options
+
+Please review https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-remote/security/security-statement/ to see all the security options Team Viewer has to offer. 
+
+Disclaimer
+
+I do not specifically recommend TeamViewer; however, due to its native integrations, it provides a good example of how a Remote Management Tool can be selected, centrally configured, and streamlined into a single, understandable support process. This makes it easier to train employees to recognize and follow only the approved Helpdesk process, reducing the likelihood of successful social engineering and improving overall security awareness.
+
 ## Turning Technical Controls into Security Awareness
 
 This is where the technical controls and employee training come together.
