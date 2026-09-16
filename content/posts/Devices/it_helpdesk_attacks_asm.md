@@ -6,30 +6,30 @@ description: "Reducing the attack surface against fake IT helpdesk attacks by co
 summary: "A practical approach to reducing the opportunities attackers have to impersonate IT support and convince users to install or use unauthorized remote access tooling."
 categories:
   - "Defender"
-  - "Intune"
   - "Devices"
-  tags:
-    - "Microsoft Defender for Endpoint"
-    - "Microsoft Intune"
-    - "Microsoft Teams"
-    - "Advanced Hunting"
-    - "KQL"
-    - "RMM"
-    - "Remote Access"
-    - "Remote Support"
-    - "Help Desk"
-    - "Social Engineering"
-    - "Attack Surface Management"
-    - "Security Awareness"
-    - "Endpoint Security"
+  - "Intune"
+tags:
+  - "Microsoft Defender for Endpoint"
+  - "Microsoft Intune"
+  - "Microsoft Teams"
+  - "Advanced Hunting"
+  - "KQL"
+  - "RMM"
+  - "Remote Access"
+  - "Remote Support"
+  - "Help Desk"
+  - "Social Engineering"
+  - "Attack Surface Management"
+  - "Security Awareness"
+  - "Endpoint Security"
+  - "Fake Helpdesk"
 draft: true
 toc: true
 menu:
   sidebar:
     name: "Fake IT Helpdesk Attacks"
     identifier: "fake-it-helpdesk-attacks"
-    parent: "defender"
-    weight: 20
+    parent: "defender"weight: 20
 ---
 
 # Reducing the Attack Surface Against Fake IT Helpdesk Attacks
