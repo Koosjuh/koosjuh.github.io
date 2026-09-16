@@ -37,25 +37,50 @@ menu:
 
 ## Introduction
 
-Briefly introduce the increase in attacks where threat actors impersonate IT or helpdesk personnel.
+This blog is written from the perspective of an existing enterprise that wants to defend against Fake IT Helpdesk Attacks and/or standardize its remote support process.
 
-Main idea of the article:
+Threat actors are increasingly impersonating IT and Helpdesk personnel to exploit the trust users place in legitimate support processes. Instead of relying on malware or software vulnerabilities for initial access, attackers may contact employees through phone calls, Microsoft Teams, or other communication channels and convince them to approve remote access, install Remote Management Tools, provide credentials, or accept elevation prompts. Microsoft has documented multiple recent campaigns where attackers impersonated IT personnel through Teams and then convinced users to provide remote access through legitimate support tooling such as Quick Assist.
+
+Recent examples demonstrate that this is not a theoretical scenario:
+
+Odido, February 2026: Odido confirmed that attackers associated with ShinyHunters impersonated members of its IT staff and contacted customer service employees through voice phishing. One of these attacks resulted in unauthorized access and the exfiltration of customer data.
 
 **The less ambiguity there is around how IT support operates, the harder it becomes for an attacker to convincingly impersonate IT.**
 
-This article will look at both the technical attack surface and the processes employees should expect when interacting with IT.
+The goal is to create one predictable and recognizable Helpdesk process. Employees should know which tool is used, how legitimate Helpdesk personnel contact them, what actions they may be asked to perform, and, equally important, what they should never be asked to do. On the technical side the software should be correctly configured and have the appropiate security controlls in place.
 
 ## Understanding the Attack
 
-High-level overview of the attack pattern:
+A typical Fake IT Helpdesk attack starts with an attacker contacting a user while impersonating IT support. The attacker creates urgency, convinces the user to start or install a Remote Management Tool, and then obtains interactive access to the device. The user on the other side generally does not have the technical know how and can fall for this sort of social engineering. 
 
-1. Attacker contacts the user pretending to be IT.
-2. The attacker creates urgency or claims there is a technical problem.
-3. The user is instructed to install or start remote access software.
-4. The attacker obtains interactive access to the device.
-5. The attacker attempts credential theft, session theft, lateral movement, or further persistence.
+```mermaid
+flowchart LR
+    A[Attacker impersonates IT / Helpdesk either via Phone or Teams] --> B[Creates urgency or claims a technical issue]
+    B --> C[User is instructed to start or install an RMM tool]
+    C --> D[Attacker obtains interactive access]
+    D --> E[Credential or session theft]
+    D --> F[Malware / Persistence]
+    D --> G[Reconnaissance / Lateral Movement]
+```
 
-Discuss why legitimate RMM software is particularly useful to attackers.
+Legitimate RMM software is attractive to attackers because it already provides many capabilities required for hands-on-keyboard access, while its executables and network traffic may be considered legitimate within an enterprise environment.
+
+Some remote-support tools can also run as portable or per-user applications without requiring administrative installation. Controls focused only on removing local administrator rights or preventing privileged software installation may therefore not be sufficient. The objective should be to clearly define which Remote Management Tools are authorized and how they may be used.
+
+#### Portable RMM Software examples
+
+| Product                     | Standard-user capability                                                                                                                                                                                                             | Vendor documentation                                                                                                                    |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **TeamViewer QuickSupport** | Runs as a single executable without installation or Windows administrative rights. Administrative rights are only needed later if the technician needs to interact with UAC/elevated applications.                                   | TeamViewer explicitly states that QuickSupport “runs without installation or Windows or macOS administrative rights.” ([TeamViewer][1]) |
+| **AnyDesk Portable**        | Can be downloaded and executed without installation and without administrator privileges. The session remains unelevated and cannot normally interact with UAC until elevated.                                                       | AnyDesk documents Portable Mode as not requiring administrator privileges. ([AnyDesk Help Center][2])                                   |
+| **Splashtop SOS**           | The SOS executable can be downloaded and run directly by the user. Splashtop specifically documents it as running in Windows/macOS user space without installation. A standard-user session cannot interact with UAC until elevated. | Splashtop SOS documentation confirms both the no-install model and standard-user operation. ([Splashtop On-Prem Support][3])            |
+| **Zoho Assist**             | Supports browser-based attended remote support without software installation or administrator privileges. It can initially operate at user level and has a separate elevation process for administrative operations.                 | Zoho explicitly states that its browser-based remote support requires neither installation nor elevated permissions. ([Zoho][4])        |
+
+[1]: https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-classic/modules/quicksupport/?utm_source=chatgpt.com "QuickSupport"
+[2]: https://support.anydesk.com/portable-vs-installed?utm_source=chatgpt.com "Installation"
+[3]: https://support-splashtoponprem.splashtop.com/hc/en-us/articles/900000386743-Introduction-to-Splashtop-SOS?utm_source=chatgpt.com "Introduction to Splashtop SOS – Splashtop On-Prem - Support"
+[4]: https://www.zoho.com/assist/remote-desktop/remote-desktop-software-without-download.html?utm_source=chatgpt.com "Remote Access Without Download or Installation - Zoho Assist"
+
 
 ## Discovering RMM Software with Microsoft Defender
 
