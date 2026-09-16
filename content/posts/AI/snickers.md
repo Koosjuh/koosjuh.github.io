@@ -222,17 +222,25 @@ The Snickers campaign is intentionally benign, but the delivery mechanism demons
 ```mermaid
 graph TD
     A["Trusted-looking content is shared with the AI"]
-    B["AI follows a URL"]
-    C["Webpage is retrieved"]
-    D["Webpage contains instructions aimed at the AI"]
-    E["External instructions enter the model's context"]
-    F["External content may influence the model's subsequent behavior"]
+    B["AI is instructed to follow or retrieve a URL"]
+    C["AI retrieves the external webpage"]
+    D["Webpage contains normal content"]
+    E["Webpage also contains hidden or embedded instructions<br/>targeting the AI"]
+
+    F["PROMPT INJECTION<br/>External instructions are parsed as part of the retrieved content"]
+    G["Injected instructions enter the model's context<br/>alongside the user's original request"]
+    H["The model may treat the injected instructions<br/>as instructions rather than untrusted data"]
+    I["Injected prompt may influence<br/>subsequent AI behavior"]
 
     A --> B
     B --> C
     C --> D
-    D --> E
+    C --> E
     E --> F
+    F --> G
+    D --> G
+    G --> H
+    H --> I
 ```
 
 The attacker does not necessarily need to attack the AI platform directly. They can instead place instructions somewhere they expect AI systems to eventually read.
