@@ -27,9 +27,10 @@ draft: true
 toc: true
 menu:
   sidebar:
-    name: "Fake IT Helpdesk Attacks"
-    identifier: "fake-it-helpdesk-attacks"
-    parent: "defender"weight: 20
+    name: Devices
+    identifier: Configuration
+    parent: "Devices"
+    weight: 20
 ---
 
 # Reducing the Attack Surface Against Fake IT Helpdesk Attacks
