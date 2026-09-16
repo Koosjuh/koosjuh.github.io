@@ -68,9 +68,9 @@ The prompt is contained inside the site's normal Freeform content structure:
 
 When viewing the source code the prompt is located here:
 
-![Prompt Injection Location in source code](/static/images/posts/snickers/snickers.png)
+![Prompt Injection Location in source code](/images/posts/snickers/snickers.png)
 
-![Prompt Injection](/static/images/posts/snickers/snickers-2.png)
+![Prompt Injection](/images/posts/snickers/snickers-2.png)
 
 The HTML captured from the campaign shows the complete instruction block beginning directly inside the `freeform-story__paragraph` element.
 
