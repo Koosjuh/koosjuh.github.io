@@ -6,31 +6,33 @@ hero: "/images/posts/fake-it-helpdesk.png"
 description: "Reducing the attack surface against fake IT helpdesk attacks by controlling remote access tooling, Microsoft Intune deployments, Teams external communication, and internal support processes."
 summary: "A practical approach to reducing the opportunities attackers have to impersonate IT support and convince users to install or use unauthorized remote access tooling."
 categories:
-  - "Defender"
-  - "Intune"
-  - "Devices"
-tags:
-  - "Microsoft Defender for Endpoint"
-  - "Microsoft Intune"
-  - "Microsoft Teams"
-  - "Advanced Hunting"
-  - "KQL"
-  - "RMM"
-  - "Remote Access"
-  - "Remote Support"
-  - "Help Desk"
-  - "Social Engineering"
-  - "Attack Surface Management"
-  - "Security Awareness"
-  - "Endpoint Security"
-draft: true
-toc: true
-menu:
+
+* "Defender"
+* "Intune"
+* "Devices"
+  tags:
+* "Microsoft Defender for Endpoint"
+* "Microsoft Intune"
+* "Microsoft Teams"
+* "Advanced Hunting"
+* "KQL"
+* "RMM"
+* "Remote Access"
+* "Remote Support"
+* "Help Desk"
+* "Social Engineering"
+* "Attack Surface Management"
+* "Security Awareness"
+* "Endpoint Security"
+  draft: true
+  toc: true
+  menu:
   sidebar:
-    name: "Fake IT Helpdesk Attacks"
-    identifier: "fake-it-helpdesk-attacks"
-    parent: "defender"
-    weight: 20
+  name: "Fake IT Helpdesk Attacks"
+  identifier: "fake-it-helpdesk-attacks"
+  parent: "defender"
+  weight: 20
+
 ---
 
 # Reducing the Attack Surface Against Fake IT Helpdesk Attacks
@@ -51,7 +53,7 @@ The goal is to create one predictable and recognizable Helpdesk process. Employe
 
 ## Understanding the Attack
 
-A typical Fake IT Helpdesk attack starts with an attacker contacting a user while impersonating IT support. The attacker creates urgency, convinces the user to start or install a Remote Management Tool, and then obtains interactive access to the device. The user on the other side generally does not have the technical know how and can fall for this sort of social engineering. 
+A typical Fake IT Helpdesk attack starts with an attacker contacting a user while impersonating IT support. The attacker creates urgency, convinces the user to start or install a Remote Management Tool, and then obtains interactive access to the device. The user on the other side generally does not have the technical know how and can fall for this sort of social engineering.
 
 ```mermaid
 flowchart LR
@@ -81,6 +83,9 @@ Some remote-support tools can also run as portable or per-user applications with
 [3]: https://support-splashtoponprem.splashtop.com/hc/en-us/articles/900000386743-Introduction-to-Splashtop-SOS?utm_source=chatgpt.com "Introduction to Splashtop SOS – Splashtop On-Prem - Support"
 [4]: https://www.zoho.com/assist/remote-desktop/remote-desktop-software-without-download.html?utm_source=chatgpt.com "Remote Access Without Download or Installation - Zoho Assist"
 
+**Disclaimer**
+
+These type of applications (Zoho Assist not included) can be prevented with "WDAC" however many organisations do not choose to use this due to the administration overhead this brings.
 
 ## Discovering RMM Software with Microsoft Defender
 
@@ -180,7 +185,7 @@ Document:
 * How an employee can verify that the person contacting them is actually IT
 * What IT will never ask an employee to do
 
-### Example: TeamViewer Integration, Setup, Security Controls, Security Awareness 
+### Example: TeamViewer Integration, Setup, Security Controls, Security Awareness
 
 #### Enable TeamViewer Integration
 
@@ -190,11 +195,11 @@ Go to the [Microsoft Intune admin center](https://intune.microsoft.com).
 
 Navigate to **Tenant administration** and select **Connectors and tokens**.
 
-![Intune Tenant Administration](/images/posts/helpdesk/Intune_TenantAdministration_ConnectandTokens.png)
+{{< rimg src="images/posts/helpdesk/Intune_TenantAdministration_ConnectandTokens.png" alt="Intune Tenant Administration" >}}
 
 Select **TeamViewer connector**.
 
-![TeamViewer Connector](/images/posts/helpdesk/Intune_ConnectandTokens_TeamViewerConnector.png)
+{{< rimg src="images/posts/helpdesk/Intune_ConnectandTokens_TeamViewerConnector.png" alt="TeamViewer Connector" >}}
 
 Enable the **TeamViewer Connector** and complete the required authorization process to connect your TeamViewer environment with Microsoft Intune.
 
@@ -228,13 +233,13 @@ Within Microsoft Intune, assign Helpdesk personnel only the permissions required
 
 For the TeamViewer integration specifically, Helpdesk personnel require permission to read the remote assistance connector and initiate remote assistance sessions.
 
-![TeamViewer Integration Roles and Permissions](/images/posts/helpdesk/TeamViewerIntegration_Roles_Permissions.png)
+{{< rimg src="images/posts/helpdesk/TeamViewerIntegration_Roles_Permissions.png" alt="TeamViewer Integration Roles and Permissions" >}}
 
 This keeps the approved remote-support process available to Helpdesk personnel without granting unnecessary Intune or Entra administrative privileges.
 
 See this example of a connection to a device via Intune.
 
-[Connection to Device](/images/posts/helpdesk/microsoft-intune-overview_connect_toDevice.avif)
+{{< rimg src="images/posts/helpdesk/microsoft-intune-overview_connect_toDevice.avif" alt="Connection to Device" >}}
 
 > **Security Disclaimer:** When providing remote support, any credentials or authentication tokens used during the session may be processed or stored on the remote user's device and could potentially be exposed if that device is compromised. Helpdesk personnel should therefore never use highly privileged accounts such as Global Administrator, Security Administrator, or Domain Administrator on standard user endpoints unless explicitly required and appropriately controlled. Administrative accounts should be separated by privilege tier and used according to the principles of least privilege and privileged access separation. Where local elevation is required, prefer device-specific or scoped administrative credentials rather than broad privileged identities.
 
@@ -288,10 +293,10 @@ I do not specifically recommend TeamViewer or this exact configuration. TeamView
 
 #### Other Security Options
 
-Please review https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-remote/security/security-statement/ to see all the security options Team Viewer has to offer. 
+Please review https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-remote/security/security-statement/ to see all the security options Team Viewer has to offer.
 
-- Bring your own Certificate
-- Block & Allow Lists
+* Bring your own Certificate
+* Block & Allow Lists
 
 #### Disclaimer
 
