@@ -2,7 +2,7 @@
 title: "Defender Decoded: Ensure Administrative Accounts Are Separate and Cloud-Only"
 date: 2026-11-04
 hero: "/images/posts/seperateadmin.png"
-draft: true
+draft: false
 description: "A practical look at administrative account separation, cloud-only identities, licensing, and leftover on-premises attributes."
 categories:
   - "Entra ID"
