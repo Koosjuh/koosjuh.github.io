@@ -188,8 +188,6 @@ Run this inside the relevant virtual environment or use its full interpreter pat
 
 ## Validate the copy you found
 
-Run these checks against the installation or application environment identified above:
-
 Compare what you find against the fixed releases:
 
 | Component | Fixed in |
@@ -202,6 +200,8 @@ Compare what you find against the fixed releases:
 
 End-of-life Node.js lines such as 20.x are affected and will not receive a fix. Distribution packages do not follow these numbers: Debian's fixed bookworm package is still versioned 1.0.9-2+deb12u1, so use the distribution's advisory for those.
 
+Run these checks against the installation or application environment identified above:
+
 | Environment | Read-only starting check |
 | --- | --- |
 | Shared .NET runtime | `dotnet --list-runtimes` |
@@ -213,8 +213,6 @@ End-of-life Node.js lines such as 20.x are affected and will not receive a fix. 
 For official Node.js builds, judge by the Node.js release number, not by `process.versions.brotli`. Node.js 24.22.1 contains the fix but still reports Brotli 1.2.0, because the patch was applied to the bundled source without changing its version string.
 
 Use the actual runtime path. The version on `PATH` does not account for every application copy. For .NET, check relevant architectures and custom installation paths too.
-
-Follow the product or distribution advisory. Linux fixes can be backported, and distribution-provided Node.js or .NET builds may use system Brotli instead of a bundled copy. An affected version still needs an application that processes attacker-controlled Brotli data for this decoder vulnerability to be reachable.
 
 ## Apply the update and verify
 
