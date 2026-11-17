@@ -2,6 +2,7 @@
 title: "Defender Decoded: Finding Brotli Across Your Environment"
 date: 2026-11-16
 lastmod: 2026-11-17
+hero: "/images/posts/brotli.png"
 description: "A quick-start guide to finding Brotli in your environment with Microsoft Defender software inventory and KQL."
 summary: "Start with the software inventory and Discovered vulnerabilities tab, then use KQL to investigate affected devices, Brotli DLLs, Node.js runtimes, and Python packages."
 categories:
