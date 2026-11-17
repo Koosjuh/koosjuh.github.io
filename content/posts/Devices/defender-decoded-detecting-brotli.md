@@ -3,13 +3,14 @@ title: "Defender Decoded: Finding Brotli Across Your Environment"
 date: 2026-11-16
 lastmod: 2026-11-17
 hero: "/images/posts/brotli.png"
-description: "A quick-start guide to finding Brotli in your environment with Microsoft Defender software inventory and KQL."
+description: "A quick-start guide to finding Brotli (CVE-2026-111497) in your environment with Microsoft Defender software inventory and KQL."
 summary: "Start with the software inventory and Discovered vulnerabilities tab, then use KQL to investigate affected devices, Brotli DLLs, Node.js runtimes, and Python packages."
 categories:
   - "Devices"
 tags:
   - "Microsoft Defender"
   - "Defender Vulnerability Management"
+  - "CVE-2026-111497"
   - "Advanced Hunting"
   - "KQL"
   - "Brotli"
@@ -17,7 +18,7 @@ tags:
   - "Node.js"
   - "Python"
   - "Defender Decoded"
-draft: true
+draft: false
 toc: true
 menu:
   sidebar:
@@ -27,7 +28,9 @@ menu:
     weight: 20
 ---
 
-Brotli is a lossless compression format. Google's Brotli library implements the encoder and decoder: the encoder makes data smaller, and the decoder restores the original data. Applications use it for things such as HTTP content compression. The format combines LZ77 and Huffman coding; **CVE-2026-111497 concerns the decoder**.
+Brotli is a lossless compression format, and Google's Brotli library is the implementation most software ships. **CVE-2026-111497** is an out-of-bounds write in that library's decoder, affecting versions 1.0.3 through 1.2.0. An application that decompresses attacker-supplied Brotli data can crash, leak process memory, or in some cases execute code. CISA added the CVE to its Known Exploited Vulnerabilities catalog on 27 October 2026.
+
+The library is rarely installed on its own. It is compiled into runtimes such as Node.js and .NET and packaged for Python, so finding it means looking under several product names. This post does that with Defender's software inventory and Advanced Hunting.
 
 The inventory query below is a broad name-based starting point: it searches registered software names for `brotli` across your devices, without filtering on a CVE. You may see Linux machines with Brotli packages, while copies bundled with applications can appear under a different product name. Check the software pages and the CVE findings as well.
 
@@ -36,7 +39,7 @@ The inventory query below is a broad name-based starting point: it searches regi
 In the Microsoft Defender portal, open **Vulnerability management**, then **Inventories**, and select **Software**.
 
 1. Search for **Brotli**, **Node.js**, **.NET**, and **Python**.
-2. Open each relevant software page and check **Discovered vulnerabilities** for `CVE-2026-111497`.
+2. Open each relevant software page and check **Discovered vulnerabilities** for `CVE-2026-111497`. As of 17 November 2026, Defender lists CVE-2026-111497 on the **Discovered vulnerabilities** tab of these software pages. Coverage may change, so check your own tenant.
 3. Open the CVE finding and review the affected devices. Use **Version distribution** to understand which software versions are present.
 
 Node.js, .NET, and Python applications are three key places to check for affected Brotli components. For Python, check whether the `Brotli` or `brotlicffi` package is present. Also review other applications identified by the vendor advisory.
@@ -187,13 +190,27 @@ Run this inside the relevant virtual environment or use its full interpreter pat
 
 Run these checks against the installation or application environment identified above:
 
+Compare what you find against the fixed releases:
+
+| Component | Fixed in |
+| --- | --- |
+| Google Brotli (upstream) | 1.0.10, 1.1.1, 1.2.1 |
+| Node.js | 22.23.4, 24.22.1, 26.12.1 |
+| .NET | 8.0.33, 9.0.22, 10.0.14 (11.0.0-rc.3 for .NET 11) |
+| Python `Brotli` | 1.2.1 |
+| Python `brotlicffi` | 1.2.1.0 |
+
+End-of-life Node.js lines such as 20.x are affected and will not receive a fix. Distribution packages do not follow these numbers: Debian's fixed bookworm package is still versioned 1.0.9-2+deb12u1, so use the distribution's advisory for those.
+
 | Environment | Read-only starting check |
 | --- | --- |
 | Shared .NET runtime | `dotnet --list-runtimes` |
-| Node.js | `node -p "JSON.stringify({path:process.execPath,node:process.versions.node,brotli:process.versions.brotli})"` |
+| Node.js | `node -p "JSON.stringify({path:process.execPath,node:process.versions.node})"` |
 | Debian or Ubuntu | `dpkg -l '*brotli*'`, checking installed rows marked `ii` |
 | RPM-based Linux | `rpm -qa '*brotli*'` |
 | curl | `curl --version`, or `curl.exe --version` on Windows |
+
+For official Node.js builds, judge by the Node.js release number, not by `process.versions.brotli`. Node.js 24.22.1 contains the fix but still reports Brotli 1.2.0, because the patch was applied to the bundled source without changing its version string.
 
 Use the actual runtime path. The version on `PATH` does not account for every application copy. For .NET, check relevant architectures and custom installation paths too.
 
@@ -204,6 +221,8 @@ Follow the product or distribution advisory. Linux fixes can be backported, and 
 Update the identified runtime, package, or vendor application and restart the affected processes. **Applications with a bundled runtime need their own update.** Self-contained .NET and NativeAOT applications require rebuilding and redeployment where affected. Include deployed container images and build artifacts in that review.
 
 Then rerun the CVE query after Defender processes the updated inventory. Check the remaining findings and confirm which copy the application now uses. The filenames usually stay the same, and old events remain in the query period, so continued filename matches do not mean the update failed.
+
+These checks rely on the Defender portal and Advanced Hunting, and both have a 30 day horizon. Advanced Hunting covers at most the last 30 days of data, and Defender Vulnerability Management stops showing a device's vulnerabilities once it has not reported for 30 days. A device that has been offline longer than that disappears from the results, yet it can still be vulnerable when it comes back online. Repeat the checks every other day at first, then every other week. Recurring checks, or an update process that also reaches devices when they return, keep those devices from being missed.
 
 ## References
 
